@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'projeto_adm.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'admissao',
+        'NAME': 'admissao_2',
         'USER': 'sa',
         'PASSWORD': '2241',
         'HOST': 'localhost',

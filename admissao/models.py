@@ -39,6 +39,60 @@ class Cargo(models.Model):
             '{cbo}': self.cbo,
         }
 
+
+class Turno(models.Model):
+    nome = models.CharField(max_length=250)
+    jornada_de_semana = models.CharField(max_length=250)
+    periodo_semanal = models.CharField(max_length=250)
+    horas_semana = models.CharField(max_length=250)
+    jornada_fim_semana = models.CharField(max_length=250)
+    periodo_fim_semana = models.CharField(max_length=250)
+    horas_fim_semana = models.CharField(max_length=250)
+
+
+    def __str__(self):
+        return f'{self.nome}'
+    
+    def get_field_values(self):
+        return {
+            '{nome_turno}': self.nome,
+            '{jornada_de_semana}': self.jornada_de_semana,
+            '{periodo_semanal}': self.periodo_semanal,
+            '{horas_semana}': self.horas_semana,
+            '{jornada_fim_semana}': self.jornada_fim_semana,
+            '{periodo_fim_semana}': self.periodo_fim_semana,
+            '{horas_fim_semana}': self.horas_fim_semana,
+        }   
+    
+class Departamento(models.Model):
+    nome_departamento = models.CharField(max_length=250)
+    endereco_local = models.CharField(max_length=250)
+    id_dep_fc = models.CharField(max_length=250)
+    turno = models.ForeignKey(
+        Turno, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    cliente_gi_dep = models.ForeignKey(
+        ClienteGI, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    def __str__(self):
+        return f'{self.cliente_gi_dep} - {self.nome_departamento} - {self.turno}'
+    
+    def get_field_values(self):
+        return {
+            '{nome_departamento}': self.nome_departamento,
+            '{endereco_local}': self.endereco_local,
+            '{id_dep_fc}': self.id_dep_fc,
+            '{nome_turno}': self.turno.nome if self.turno else '',
+            '{jornada_de_semana}': self.turno.jornada_de_semana if self.turno else '',
+            '{periodo_semanal}': self.turno.periodo_semanal if self.turno else '',
+            '{horas_semana}': self.turno.horas_semana if self.turno else '',
+            '{jornada_fim_semana}': self.turno.jornada_fim_semana if self.turno else '',
+            '{periodo_fim_semana}': self.turno.periodo_fim_semana if self.turno else '',
+        }
+    
+
+
+
 class Base(models.Model):
     cargo = models.ForeignKey(
         Cargo, on_delete=models.SET_NULL, null=True, blank=True
@@ -95,6 +149,9 @@ class Collaborator(models.Model):
     email = models.CharField(max_length=250)
     cargo = models.ForeignKey(
         Base, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    departamento_turno = models.ForeignKey(
+        Departamento, on_delete=models.SET_NULL, null=True, blank=True
     )
        
     def __str__(self):

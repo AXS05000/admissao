@@ -22,6 +22,8 @@ def generate_contract(template, collaborator):
     replacements.update(collaborator.get_field_values())
     if collaborator.cargo:
         replacements.update(collaborator.cargo.get_field_values())
+    if collaborator.departamento_turno:
+        replacements.update(collaborator.departamento_turno.get_field_values())
 
     # Loop through each paragraph
     for paragraph in doc.paragraphs:
