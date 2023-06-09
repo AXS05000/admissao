@@ -3,9 +3,11 @@ import os
 from django.conf import settings
 from django.http import FileResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView
 from docx import Document
 
-from .forms import UploadFileForm
+from .forms import Admissao, UploadFileForm
 from .models import Collaborator, ContractTemplate
 
 # Create your views here.
@@ -77,3 +79,13 @@ def upload_template(request):
     else:
         form = UploadFileForm()
     return render(request, 'upload.html', {'form': form})
+
+class AdmissaoCreateView(CreateView):
+    model = Collaborator
+    form_class = Admissao
+    template_name = 'formulario_adm.html'  # substitua com o seu template
+    success_url = reverse_lazy('admissao')  # substitua com a URL que você quer redirecionar após o sucesso
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
