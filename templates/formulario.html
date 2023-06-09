@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar novo usuário</title>
+</head>
+<body>
+    <h2>Criar novo usuário</h2>
+    <form method="POST" class="form" autocomplete="off" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="input-group">
+            <div class="input-box">
+                <div class="select">
+                    <div class="form-contratos">
+                        <div class="campo">
+                            <div class="campo-nome">Cargo ID:</div>
+                            <div class="campo-valor">{{form.Cargo_Id}}</div>
+                        </div>
+                        <div class="campo">
+                            <div class="campo-nome">Departamento ID:</div>
+                            <div class="campo-valor">{{form.Departamento_Id}}</div>
+                        </div>
+                        <div class="campo">
+                            <div class="campo-nome">Filial ID:</div>
+                            <div class="campo-valor">{{form.CentroCusto_Id}}</div>
+                        </div>
+                        <div class="campo">
+                            <div class="campo-nome">Nome:</div>
+                            <div class="campo-valor">{{form.Nome}}</div>
+                        </div>
+                        <div class="campo">
+                            <div class="campo-nome">Data de Admissão:</div>
+                            <div class="campo-valor">{{form.DataAdmissao}}</div>
+                        </div>
+                        <div class="campo">
+                            <div class="campo-nome">Senha:</div>
+                            <div class="campo-valor">{{form.Senha}}</div>
+                        </div>
+                        <div class="campo">
+                            <div class="campo-nome">Matricula:</div>
+                            <div class="campo-valor">{{form.Funcional}}</div>
+                        </div>
+                        <div class="campo">
+                            <div class="campo-nome">Email:</div>
+                            <div class="campo-valor">{{form.Email}}</div>
+                        </div>
+                        <div class="campo">
+                            <div class="campo-nome">Celular:</div>
+                            <div class="campo-valor">{{form.Celular}}</div>
+                        </div>
+                        <div class="campo">
+                            <div class="campo-nome">Data de Nascimento:</div>
+                            <div class="campo-valor">{{form.DataNascimento}}</div>
+                        </div>
+                        <div class="campo">
+                            <div class="campo-nome">RG:</div>
+                            <div class="campo-valor">{{form.RG}}</div>
+                        </div>
+                        <div class="campo">
+                            <div class="campo-nome">PIS:</div>
+                            <div class="campo-valor">{{form.PIS}}</div>
+                        </div>
+                        <div class="campo">
+                            <div class="campo-nome">CPF:</div>
+                            <div class="campo-valor">{{form.CPF}}</div>
+                        </div>
+                        <div class="campo">
+                            <div class="campo-nome">Sexo:</div>
+                            <div class="campo-valor">{{form.Sexo}}</div>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        
+        <button type="submit">Criar Usuário</button>
+    </form>
+</body>
+</html>
