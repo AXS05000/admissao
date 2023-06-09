@@ -20,7 +20,7 @@ class ClienteGI(models.Model):
     def get_field_values(self):
         return {
             '{nome_cliente}': self.nome,
-            '{cod_cliente}': str(self.cod_cliente),
+            '{cod_cliente}': self.cod_cliente,
             '{responsavel_filial}': str(self.responsavel_filial),
             '{telefone_filial}': self.telefone_filial,
         }
@@ -65,7 +65,9 @@ class Base(models.Model):
     def get_field_values(self):
         return {
             '{nome_cargo}': self.cargo.nome if self.cargo else '',
+            '{cbo}': self.cargo.cbo if self.cargo else '',  # fixed line
             '{nome_cliente}': self.cliente.nome if self.cliente else '',
+            '{cod_cliente}': str(self.cliente.cod_cliente) if self.cliente else '',
             '{salario}': str(self.salario),
             '{salario_mes}': str(self.salario_mes),
             '{vt}': str(self.vt),
@@ -102,15 +104,15 @@ class Collaborator(models.Model):
         return {
             '{nome}': self.name,
             '{cpf}': self.cpf,
-            '{admissão}': str(self.admission_date),
+            '{admissão}': self.admission_date.strftime('%d/%m/%Y') if self.admission_date else '',
             '{rg}': self.rg,
             '{orgao_emissor_rg}': self.orgao_emissor_rg,
             '{uf_rg}': self.uf_rg,
-            '{data_emissao_rg}': self.data_emissao_rg,
+            '{data_emissao_rg}': self.data_emissao_rg.strftime('%d/%m/%Y') if self.data_emissao_rg else '',
             '{n_ctps}': self.n_ctps,
             '{serie}': self.serie,
             '{uf_ctps}': self.uf_ctps,
-            '{data_emissao_ctps}': self.data_emissao_ctps,
+            '{data_emissao_ctps}': self.data_emissao_ctps.strftime('%d/%m/%Y') if self.data_emissao_ctps else '',
             '{endereco}': self.endereco,
             '{cep}': self.cep,
             '{celular}': self.celular,
