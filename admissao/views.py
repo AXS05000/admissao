@@ -7,14 +7,13 @@ from django.http import FileResponse, HttpResponseRedirect, JsonResponse
 # Create your views here.
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
-from django.views import View
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 from docx import Document
 from rest_framework import generics
 
-from .forms import Admissao, AdmissaoForm, TemplateSelectForm, UploadFileForm
+from .forms import Admissao, AdmissaoForm, UploadFileForm
 from .models import Base, Collaborator, ContractTemplate, Departamento, Turno
 from .serializers import (BaseSerializer, DepartamentoSerializer,
                           TurnoSerializer)
