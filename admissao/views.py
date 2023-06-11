@@ -153,6 +153,7 @@ def generate_contract(template, collaborator):
 
 
 
+
 def select_contract(request):
     if request.method == 'POST':
         collaborator_id = request.POST.get('collaborator')
@@ -169,4 +170,23 @@ def select_contract(request):
     templates = ContractTemplate.objects.all()
 
     return render(request, 'select_contract.html', {'collaborators': collaborators, 'templates': templates})
+
+
+def select_contract_id(request, collaborator_id):
+    if request.method == 'POST':
+        template_id = request.POST.get('template')
+
+        collaborator = Collaborator.objects.get(id=collaborator_id)
+        template = ContractTemplate.objects.get(id=template_id)
+
+        contract_filename = generate_contract(template, collaborator)
+
+        return FileResponse(open(contract_filename, 'rb'), as_attachment=True, filename=contract_filename)
+
+    # Agora, se o request não for POST, o colaborador será buscado pelo parâmetro na URL:
+    else:
+        collaborator = Collaborator.objects.get(id=collaborator_id)
+        templates = ContractTemplate.objects.all()
+
+        return render(request, 'select_contract_id.html', {'collaborator': collaborator, 'templates': templates})
 

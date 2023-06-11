@@ -12,6 +12,6 @@
     <!-- Add the rest of your fields here -->
 
     <a href="{% url 'edit_collaborator' object.id %}">Editar</a>
-    <a href="#">Generate contract</a>
+    <a href="{% url 'select_contract_id' object.id %}">Gerar contrato</a>
 </body>
 </html>

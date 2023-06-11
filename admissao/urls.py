@@ -6,6 +6,7 @@ from .views import (AdmissaoCreateView, AdmissaoRHCreateView, BaseList,
 
 urlpatterns = [
     path('gerar_contrato/', views.select_contract, name='select_contract'),
+    path('gerar_contrato/<int:collaborator_id>/', views.select_contract_id, name='select_contract_id'),
     path('upload_template/', views.upload_template, name='upload_template'),
     path('admissao/', AdmissaoCreateView.as_view(), name='admissao'),
     path('admissao_rh/', AdmissaoRHCreateView.as_view(), name='admissao_rh'),
