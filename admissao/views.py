@@ -1,19 +1,37 @@
 import os
 
 from django.conf import settings
+from django.contrib import messages
 from django.http import FileResponse, HttpResponseRedirect, JsonResponse
+# Create your views here.
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from docx import Document
+from rest_framework import generics
 
-from .forms import Admissao, UploadFileForm
-from .models import Collaborator, ContractTemplate
-
-# Create your views here.
-
+from .forms import Admissao, AdmissaoForm, UploadFileForm
+from .models import Base, Collaborator, ContractTemplate, Departamento
+from .serializers import BaseSerializer, DepartamentoSerializer
 
 
+class DepartamentoList(generics.ListAPIView):
+    serializer_class = DepartamentoSerializer
+
+    def get_queryset(self):
+        cliente_gi_id = self.request.query_params.get('cliente_gi_id', None)
+        if cliente_gi_id is not None:
+            return Departamento.objects.filter(cliente_gi_dep=cliente_gi_id)
+        return Departamento.objects.none()
+
+class BaseList(generics.ListAPIView):
+    serializer_class = BaseSerializer
+
+    def get_queryset(self):
+        cliente_gi_id = self.request.query_params.get('cliente_gi_id', None)
+        if cliente_gi_id is not None:
+            return Base.objects.filter(cliente=cliente_gi_id)
+        return Base.objects.none()
 
 def generate_contract(template, collaborator):
     # Load the Word document
@@ -89,3 +107,22 @@ class AdmissaoCreateView(CreateView):
     def form_valid(self, form):
         form.instance.created_by = self.request.user
         return super().form_valid(form)
+    
+class AdmissaoRHCreateView(CreateView):
+    model = Collaborator
+    form_class = AdmissaoForm
+    template_name = 'formulario_adm_rh.html'
+    success_url = reverse_lazy('admissao_rh')
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(self.request, f"Erro no campo '{form.fields[field].label}': {error}")
+        return super().form_invalid(form)
+    
+
+    

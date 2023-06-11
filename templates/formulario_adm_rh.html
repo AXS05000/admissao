@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admissão</title>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        {% if messages %}
+        {% for message in messages %}
+        {% if message.tags == 'success' %}
+            <div class="position-fixed bottom-1 end-1 z-index-2">
+                <div class="toast fade show p-2 bg-white" role="alert" aria-live="assertive" id="successToast" aria-atomic="true">
+                    <div class="toast-header border-0">
+                        <i class="material-icons text-success me-2">check</i>
+                        <span class="me-auto font-weight-bold">Notificação do sistema</span>
+                        <small class="text-body">1 seg atrás</small>
+                        <i class="fas fa-times text-md ms-3 cursor-pointer" data-bs-dismiss="toast" aria-label="Close"></i>
+                    </div>
+                        <hr class="horizontal dark m-0">
+                    <div class="toast-body">
+                            {{ message }}<br>
+                    </div>
+                </div>
+            </div>
+        {% elif message.tags == 'error' %}
+            <div class="alert alert-danger alert-dismissible text-white" role="alert">
+                <span class="text-sm">{{ message }}</span>
+                <button type="button" class="btn-close text-lg py-3 opacity-10 cursor-pointer" data-bs-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% elif message.tags == 'warning' %}
+            
+            <div class="alert alert-info2 alert-dismissible text-white" role="alert">
+                <span class="text-sm">{{ message }}</span>
+                <button type="button" class="btn-close text-lg py-3 opacity-10 cursor-pointer" data-bs-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% else %}
+          <li>{{ message }}</li>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+        <div class="campo-form">Nome:</div>
+        <div>
+            {{ form.name }}
+        </div>
+        <div class="campo-form">CPF:</div>
+        <div>
+            {{ form.cpf }}
+        </div>
+        <div class="campo-form">Cliente GI:</div>
+        <div id="div_id_cliente_gi">
+            {{ form.cliente_gi }}
+        </div>
+        <div class="campo-form">Departamento:</div>
+        <div id="div_id_departamento">
+            {{ form.departamento }}
+        </div>
+        <div class="campo-form">Cargo:</div>
+        <div id="div_id_cargo">
+            {{ form.cargo }}
+        </div>
+        <div class="campo-form">Data de Admissão:</div>
+        <div>
+            {{ form.admission_date }}
+        </div>
+        <div class="campo-form">RG:</div>
+        <div>
+            {{ form.rg }}
+        </div>
+        <div class="campo-form">Orgão Emissor RG:</div>
+        <div>
+            {{ form.orgao_emissor_rg }}
+        </div>
+        <div class="campo-form">UF RG:</div>
+        <div>
+            {{ form.uf_rg }}
+        </div>
+        <div class="campo-form">Data de Emissão RG:</div>
+        <div>
+            {{ form.data_emissao_rg }}
+        </div>
+        <div class="campo-form">N° CTPS:</div>
+        <div>
+            {{ form.n_ctps }}
+        </div>
+        <div class="campo-form">Serie CTPS:</div>
+        <div>
+            {{ form.serie }}
+        </div>
+        <div class="campo-form">UF CTPS:</div>
+        <div>
+            {{ form.uf_ctps }}
+        </div>
+        <div class="campo-form">Data de Emissão CTPS:</div>
+        <div>
+            {{ form.data_emissao_ctps }}
+        </div>
+        <div class="campo-form">CEP:</div>
+        <div>
+            {{ form.cep }}
+        </div>
+        <div class="campo-form">Endereço:</div>
+        <div>
+            {{ form.endereco }}
+        </div>
+        <div class="campo-form">Celular:</div>
+        <div>
+            {{ form.celular }}
+        </div>
+        <div class="campo-form">Email:</div>
+        <div>
+            {{ form.email }}
+        </div>
+        <div class="campo-form">Turno:</div>
+        <div>
+            {{ form.turno }}
+        </div>
+        
+        <input type="submit" value="Submit">
+    </form>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#id_cliente_gi').change(function () {
+                let cliente_gi_id = $(this).val();
+                $.get('/api/departamentos/?cliente_gi_id=' + cliente_gi_id, function (data) {
+                    let select = $('#id_departamento');
+                    select.empty();
+                    $.each(data, function (index, value) {
+                        select.append('<option value="' + value.id + '">' + value.nome_departamento + '</option>');
+                    });
+                });
+                $.get('/api/bases/?cliente_gi_id=' + cliente_gi_id, function (data) {
+                    let select = $('#id_cargo');
+                    select.empty();
+                    $.each(data, function (index, value) {
+                        select.append('<option value="' + value.id + '">' + value.cargo + '</option>');
+                    });
+                });
+            });
+        });
+    </script>
+    
+</body>
+</html>

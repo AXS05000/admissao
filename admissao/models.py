@@ -25,21 +25,24 @@ class ClienteGI(models.Model):
             '{telefone_filial}': self.telefone_filial,
         }
     
-class Cargo(models.Model):
-    nome = models.CharField(max_length=250)
-    cbo = models.CharField(max_length=250)
-
-
+    
+class Departamento(models.Model):
+    nome_departamento = models.CharField(max_length=250)
+    endereco_local = models.CharField(max_length=250)
+    id_dep_fc = models.CharField(max_length=250)
+    cliente_gi_dep = models.ForeignKey(
+        ClienteGI, on_delete=models.SET_NULL, null=True, blank=True
+    )
     def __str__(self):
-        return f'{self.nome}'
+        return f'{self.cliente_gi_dep} - {self.nome_departamento}'
     
     def get_field_values(self):
         return {
-            '{nome_cargo}': self.nome,
-            '{cbo}': self.cbo,
+            '{nome_departamento}': self.nome_departamento,
+            '{endereco_local}': self.endereco_local,
+            '{id_dep_fc}': self.id_dep_fc,
         }
-
-
+    
 class Turno(models.Model):
     nome = models.CharField(max_length=250)
     jornada_de_semana = models.CharField(max_length=250)
@@ -48,6 +51,9 @@ class Turno(models.Model):
     jornada_fim_semana = models.CharField(max_length=250)
     periodo_fim_semana = models.CharField(max_length=250)
     horas_fim_semana = models.CharField(max_length=250)
+    departamento = models.ForeignKey(
+        Departamento, on_delete=models.SET_NULL, null=True, blank=True
+    )
 
 
     def __str__(self):
@@ -63,40 +69,10 @@ class Turno(models.Model):
             '{periodo_fim_semana}': self.periodo_fim_semana,
             '{horas_fim_semana}': self.horas_fim_semana,
         }   
-    
-class Departamento(models.Model):
-    nome_departamento = models.CharField(max_length=250)
-    endereco_local = models.CharField(max_length=250)
-    id_dep_fc = models.CharField(max_length=250)
-    turno = models.ForeignKey(
-        Turno, on_delete=models.SET_NULL, null=True, blank=True
-    )
-    cliente_gi_dep = models.ForeignKey(
-        ClienteGI, on_delete=models.SET_NULL, null=True, blank=True
-    )
-    def __str__(self):
-        return f'{self.cliente_gi_dep} - {self.nome_departamento} - {self.turno}'
-    
-    def get_field_values(self):
-        return {
-            '{nome_departamento}': self.nome_departamento,
-            '{endereco_local}': self.endereco_local,
-            '{id_dep_fc}': self.id_dep_fc,
-            '{nome_turno}': self.turno.nome if self.turno else '',
-            '{jornada_de_semana}': self.turno.jornada_de_semana if self.turno else '',
-            '{periodo_semanal}': self.turno.periodo_semanal if self.turno else '',
-            '{horas_semana}': self.turno.horas_semana if self.turno else '',
-            '{jornada_fim_semana}': self.turno.jornada_fim_semana if self.turno else '',
-            '{periodo_fim_semana}': self.turno.periodo_fim_semana if self.turno else '',
-        }
-    
-
 
 
 class Base(models.Model):
-    cargo = models.ForeignKey(
-        Cargo, on_delete=models.SET_NULL, null=True, blank=True
-    )
+    cargo = models.CharField(max_length=250)
     cliente = models.ForeignKey(
         ClienteGI, on_delete=models.SET_NULL, null=True, blank=True
     )
@@ -118,7 +94,7 @@ class Base(models.Model):
     
     def get_field_values(self):
         return {
-            '{nome_cargo}': self.cargo.nome if self.cargo else '',
+            '{nome_cargo}': self.cargo,
             '{cbo}': self.cargo.cbo if self.cargo else '',  # fixed line
             '{nome_cliente}': self.cliente.nome if self.cliente else '',
             '{cod_cliente}': str(self.cliente.cod_cliente) if self.cliente else '',
@@ -150,8 +126,14 @@ class Collaborator(models.Model):
     cargo = models.ForeignKey(
         Base, on_delete=models.SET_NULL, null=True, blank=True
     )
-    departamento_turno = models.ForeignKey(
+    turno = models.ForeignKey(
+        Turno, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    departamento = models.ForeignKey(
         Departamento, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    cliente_gi = models.ForeignKey(
+        ClienteGI, on_delete=models.SET_NULL, null=True, blank=True
     )
        
     def __str__(self):
