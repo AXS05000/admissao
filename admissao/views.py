@@ -11,27 +11,10 @@ from docx import Document
 from rest_framework import generics
 
 from .forms import Admissao, AdmissaoForm, UploadFileForm
-from .models import Base, Collaborator, ContractTemplate, Departamento
-from .serializers import BaseSerializer, DepartamentoSerializer
+from .models import Base, Collaborator, ContractTemplate, Departamento, Turno
+from .serializers import (BaseSerializer, DepartamentoSerializer,
+                          TurnoSerializer)
 
-
-class DepartamentoList(generics.ListAPIView):
-    serializer_class = DepartamentoSerializer
-
-    def get_queryset(self):
-        cliente_gi_id = self.request.query_params.get('cliente_gi_id', None)
-        if cliente_gi_id is not None:
-            return Departamento.objects.filter(cliente_gi_dep=cliente_gi_id)
-        return Departamento.objects.none()
-
-class BaseList(generics.ListAPIView):
-    serializer_class = BaseSerializer
-
-    def get_queryset(self):
-        cliente_gi_id = self.request.query_params.get('cliente_gi_id', None)
-        if cliente_gi_id is not None:
-            return Base.objects.filter(cliente=cliente_gi_id)
-        return Base.objects.none()
 
 def generate_contract(template, collaborator):
     # Load the Word document
@@ -125,4 +108,29 @@ class AdmissaoRHCreateView(CreateView):
         return super().form_invalid(form)
     
 
+class DepartamentoList(generics.ListAPIView):
+    serializer_class = DepartamentoSerializer
+
+    def get_queryset(self):
+        cliente_gi_id = self.request.query_params.get('cliente_gi_id', None)
+        if cliente_gi_id is not None:
+            return Departamento.objects.filter(cliente_gi_dep=cliente_gi_id)
+        return Departamento.objects.none()
+
+class BaseList(generics.ListAPIView):
+    serializer_class = BaseSerializer
+
+    def get_queryset(self):
+        cliente_gi_id = self.request.query_params.get('cliente_gi_id', None)
+        if cliente_gi_id is not None:
+            return Base.objects.filter(cliente=cliente_gi_id)
+        return Base.objects.none()
     
+class TurnoList(generics.ListAPIView):
+    serializer_class = TurnoSerializer
+
+    def get_queryset(self):
+        departamento_id = self.request.query_params.get('departamento_id', None)
+        if departamento_id is not None:
+            return Turno.objects.filter(departamento=departamento_id)
+        return Turno.objects.none()

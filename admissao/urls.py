@@ -2,7 +2,7 @@ from django.urls import path
 
 from . import views
 from .views import (AdmissaoCreateView, AdmissaoRHCreateView, BaseList,
-                    DepartamentoList)
+                    DepartamentoList, TurnoList)
 
 urlpatterns = [
     path('gerar_contrato/', views.select_contract, name='select_contract'),
@@ -11,4 +11,5 @@ urlpatterns = [
     path('admissao_rh/', AdmissaoRHCreateView.as_view(), name='admissao_rh'),
     path('api/departamentos/', DepartamentoList.as_view(), name='api-departamentos'),
     path('api/bases/', BaseList.as_view(), name='api-bases'),
+    path('api/turnos/', TurnoList.as_view(), name='api-turnos'),
 ]
