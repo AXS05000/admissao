@@ -1,6 +1,5 @@
 import os
 
-import pythoncom
 from django.conf import settings
 from django.contrib import messages
 from django.db.models import Q
@@ -155,21 +154,7 @@ def generate_contract(template, collaborator):
     new_contract_filename = os.path.join(contract_directory, f'{collaborator.name}_{template.name}.docx')
     doc.save(new_contract_filename)
 
-    # Initialize the Python COM interop
-    pythoncom.CoInitialize()
-
-    # Convert the Word document to PDF
-    new_contract_pdf_filename = os.path.join(contract_directory, f'{collaborator.name}_{template.name}.pdf')
-    convert(new_contract_filename, new_contract_pdf_filename)
-
-    # Uninitialize the Python COM interop
-    pythoncom.CoUninitialize()
-
-    # Delete the Word document
-    os.remove(new_contract_filename)
-
-    return new_contract_pdf_filename
-
+    return new_contract_filename
 
 def select_contract(request):
     if request.method == 'POST':
@@ -181,13 +166,12 @@ def select_contract(request):
 
         contract_filename = generate_contract(template, collaborator)
 
-        return FileResponse(open(contract_filename, 'rb'), as_attachment=True, filename=os.path.basename(contract_filename), content_type='application/pdf')
+        return FileResponse(open(contract_filename, 'rb'), as_attachment=True, filename=contract_filename)
 
     collaborators = Collaborator.objects.all()
     templates = ContractTemplate.objects.all()
 
     return render(request, 'select_contract.html', {'collaborators': collaborators, 'templates': templates})
-
 
 def select_contract_id(request, collaborator_id):
     if request.method == 'POST':
@@ -198,7 +182,7 @@ def select_contract_id(request, collaborator_id):
 
         contract_filename = generate_contract(template, collaborator)
 
-        return FileResponse(open(contract_filename, 'rb'), as_attachment=True, filename=os.path.basename(contract_filename), content_type='application/pdf')
+        return FileResponse(open(contract_filename, 'rb'), as_attachment=True, filename=contract_filename)
 
     # Agora, se o request não for POST, o colaborador será buscado pelo parâmetro na URL:
     else:
