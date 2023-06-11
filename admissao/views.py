@@ -41,22 +41,6 @@ class CollaboratorSearchView(ListView):
         return Collaborator.objects.all()
 
 
-
-
-
-
-
-def upload_template(request):
-    if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            new_template = ContractTemplate(name=form.cleaned_data['name'], file=request.FILES['file'])
-            new_template.save()
-            return HttpResponseRedirect('/upload_template')  # Redirect to a page showing success.
-    else:
-        form = UploadFileForm()
-    return render(request, 'upload.html', {'form': form})
-
 class AdmissaoCreateView(CreateView):
     model = Collaborator
     form_class = Admissao
@@ -111,7 +95,24 @@ class TurnoList(generics.ListAPIView):
             return Turno.objects.filter(departamento=departamento_id)
         return Turno.objects.none()
     
-       
+
+
+
+
+
+def upload_template(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            new_template = ContractTemplate(name=form.cleaned_data['name'], file=request.FILES['file'])
+            new_template.save()
+            return HttpResponseRedirect('/upload_template')  # Redirect to a page showing success.
+    else:
+        form = UploadFileForm()
+    return render(request, 'upload.html', {'form': form})
+
+
+
 def generate_contract(template, collaborator):
     # Load the Word document
     doc = Document(template.file.path)
@@ -150,9 +151,6 @@ def generate_contract(template, collaborator):
 
     return new_contract_filename
 
-
-
-
 def select_contract(request):
     if request.method == 'POST':
         collaborator_id = request.POST.get('collaborator')
@@ -169,7 +167,6 @@ def select_contract(request):
     templates = ContractTemplate.objects.all()
 
     return render(request, 'select_contract.html', {'collaborators': collaborators, 'templates': templates})
-
 
 def select_contract_id(request, collaborator_id):
     if request.method == 'POST':
