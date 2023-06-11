@@ -2,72 +2,49 @@ import os
 
 from django.conf import settings
 from django.contrib import messages
+from django.db.models import Q
 from django.http import FileResponse, HttpResponseRedirect, JsonResponse
 # Create your views here.
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView
+from django.views import View
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.list import ListView
 from docx import Document
 from rest_framework import generics
 
-from .forms import Admissao, AdmissaoForm, UploadFileForm
+from .forms import Admissao, AdmissaoForm, TemplateSelectForm, UploadFileForm
 from .models import Base, Collaborator, ContractTemplate, Departamento, Turno
 from .serializers import (BaseSerializer, DepartamentoSerializer,
                           TurnoSerializer)
 
 
-def generate_contract(template, collaborator):
-    # Load the Word document
-    doc = Document(template.file.path)
+class CollaboratorUpdateView(UpdateView):
+    model = Collaborator
+    template_name = 'collaborator_form.html'
+    fields = '__all__'
+    success_url = reverse_lazy('search_collaborator')
 
-    # Prepare the replacement dictionary combining values from all models
-    replacements = {}
-    replacements.update(collaborator.get_field_values())
-    if collaborator.cargo:
-        replacements.update(collaborator.cargo.get_field_values())
-    if collaborator.departamento_turno:
-        replacements.update(collaborator.departamento_turno.get_field_values())
+class CollaboratorDetailView(DetailView):
+    model = Collaborator
+    template_name = 'collaborator_detail.html'  # substitua com o seu template
 
-    # Loop through each paragraph
-    for paragraph in doc.paragraphs:
-        # Replace the keys in the entire paragraph text, not just the runs
-        inline = paragraph.runs
-        for key, value in replacements.items():
-            if key in paragraph.text:
-                text = paragraph.text.replace(key, value)
-                for i in range(len(inline)):
-                    if key in inline[i].text:
-                        text = inline[i].text.replace(key, value)
-                        inline[i].text = text
 
-    # Make sure the contracts directory exists
-    contract_directory = os.path.join(settings.MEDIA_ROOT, 'contracts')
-    os.makedirs(contract_directory, exist_ok=True)
+class CollaboratorSearchView(ListView):
+    model = Collaborator
+    template_name = 'search_collaborator.html'  # substitua com o seu template
 
-    # Save the new Word document
-    new_contract_filename = os.path.join(contract_directory, f'{collaborator.name}_{template.name}.docx')
-    doc.save(new_contract_filename)
-
-    return new_contract_filename
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return Collaborator.objects.filter(Q(cpf__icontains=query))
+        return Collaborator.objects.all()
 
 
 
-def select_contract(request):
-    if request.method == 'POST':
-        collaborator_id = request.POST.get('collaborator')
-        template_id = request.POST.get('template')
 
-        collaborator = Collaborator.objects.get(id=collaborator_id)
-        template = ContractTemplate.objects.get(id=template_id)
 
-        contract_filename = generate_contract(template, collaborator)
-
-        return FileResponse(open(contract_filename, 'rb'), as_attachment=True, filename=contract_filename)
-
-    collaborators = Collaborator.objects.all()
-    templates = ContractTemplate.objects.all()
-
-    return render(request, 'select_contract.html', {'collaborators': collaborators, 'templates': templates})
 
 
 def upload_template(request):
@@ -134,3 +111,62 @@ class TurnoList(generics.ListAPIView):
         if departamento_id is not None:
             return Turno.objects.filter(departamento=departamento_id)
         return Turno.objects.none()
+    
+       
+def generate_contract(template, collaborator):
+    # Load the Word document
+    doc = Document(template.file.path)
+
+    # Prepare the replacement dictionary combining values from all models
+    replacements = {}
+    replacements.update(collaborator.get_field_values())
+    if collaborator.departamento:
+        replacements.update(collaborator.departamento.get_field_values())
+    if collaborator.cliente_gi:
+        replacements.update(collaborator.cliente_gi.get_field_values())
+    if collaborator.turno:
+        replacements.update(collaborator.turno.get_field_values())
+    if collaborator.cargo:
+        replacements.update(collaborator.cargo.get_field_values())
+
+    # Loop through each paragraph
+    for paragraph in doc.paragraphs:
+        # Replace the keys in the entire paragraph text, not just the runs
+        inline = paragraph.runs
+        for key, value in replacements.items():
+            if key in paragraph.text:
+                text = paragraph.text.replace(key, value)
+                for i in range(len(inline)):
+                    if key in inline[i].text:
+                        text = inline[i].text.replace(key, value)
+                        inline[i].text = text
+
+    # Make sure the contracts directory exists
+    contract_directory = os.path.join(settings.MEDIA_ROOT, 'contracts')
+    os.makedirs(contract_directory, exist_ok=True)
+
+    # Save the new Word document
+    new_contract_filename = os.path.join(contract_directory, f'{collaborator.name}_{template.name}.docx')
+    doc.save(new_contract_filename)
+
+    return new_contract_filename
+
+
+
+def select_contract(request):
+    if request.method == 'POST':
+        collaborator_id = request.POST.get('collaborator')
+        template_id = request.POST.get('template')
+
+        collaborator = Collaborator.objects.get(id=collaborator_id)
+        template = ContractTemplate.objects.get(id=template_id)
+
+        contract_filename = generate_contract(template, collaborator)
+
+        return FileResponse(open(contract_filename, 'rb'), as_attachment=True, filename=contract_filename)
+
+    collaborators = Collaborator.objects.all()
+    templates = ContractTemplate.objects.all()
+
+    return render(request, 'select_contract.html', {'collaborators': collaborators, 'templates': templates})
+

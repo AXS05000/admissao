@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhe</title>
+</head>
+<body>
+    <h1>{{ object.name }}</h1>
+    <p>CPF: {{ object.cpf }}</p>
+    <p>Data de Admissão: {{ object.admission_date }}</p>
+    <!-- Add the rest of your fields here -->
+
+    <a href="{% url 'edit_collaborator' object.id %}">Editar</a>
+    <a href="#">Generate contract</a>
+</body>
+</html>

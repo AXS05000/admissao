@@ -73,6 +73,7 @@ class Turno(models.Model):
 
 class Base(models.Model):
     cargo = models.CharField(max_length=250)
+    cbo = models.CharField(max_length=250)
     cliente = models.ForeignKey(
         ClienteGI, on_delete=models.SET_NULL, null=True, blank=True
     )
@@ -95,7 +96,7 @@ class Base(models.Model):
     def get_field_values(self):
         return {
             '{nome_cargo}': self.cargo,
-            '{cbo}': self.cargo.cbo if self.cargo else '',  # fixed line
+            '{cbo}': self.cbo,
             '{nome_cliente}': self.cliente.nome if self.cliente else '',
             '{cod_cliente}': str(self.cliente.cod_cliente) if self.cliente else '',
             '{salario}': str(self.salario),

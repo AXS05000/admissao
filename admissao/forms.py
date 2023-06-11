@@ -1,7 +1,11 @@
 from django import forms
 
-from .models import Base, ClienteGI, Collaborator, Departamento
+from .models import (Base, ClienteGI, Collaborator, ContractTemplate,
+                     Departamento)
 
+
+class TemplateSelectForm(forms.Form):
+    template = forms.ModelChoiceField(queryset=ContractTemplate.objects.all())
 
 class UploadFileForm(forms.Form):
     name = forms.CharField(max_length=200)
