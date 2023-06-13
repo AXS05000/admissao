@@ -4,8 +4,7 @@ import pythoncom
 from django.conf import settings
 from django.contrib import messages
 from django.db.models import Q
-from django.http import FileResponse, HttpResponseRedirect, JsonResponse
-# Create your views here.
+from django.http import FileResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.views.generic.detail import DetailView
@@ -59,8 +58,8 @@ class CollaboratorUpdateView(UpdateView):
 
 class CollaboratorDetailView(DetailView):
     model = Collaborator
-    template_name = 'collaborator_detail.html'  # substitua com o seu template
-
+    template_name = 'collaborator_detail.html'
+    
 
 #######################ADMISSÃO COLABORADOR#############################
 

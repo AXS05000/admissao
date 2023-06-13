@@ -18,4 +18,5 @@ urlpatterns = [
     path('colaborador/<int:pk>/', views.CollaboratorDetailView.as_view(), name='collaborator_detail'),
     path('editar/<int:pk>/', views.CollaboratorUpdateView.as_view(), name='edit_collaborator'),
 
+
 ]
