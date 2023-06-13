@@ -186,6 +186,8 @@ def generate_contract(template, collaborator):
 
     return new_contract_pdf_filename
 
+def convert_to_pdf(input_filepath, output_filepath):
+    convert(input_filepath, output_filepath)
 
 def select_contract(request):
     if request.method == 'POST':
@@ -213,8 +215,12 @@ def select_contract_id(request, collaborator_id):
         template = ContractTemplate.objects.get(id=template_id)
 
         contract_filename = generate_contract(template, collaborator)
+        
+        # Vamos obter apenas o nome do arquivo sem o caminho
+        filename = os.path.basename(contract_filename)
 
-        return FileResponse(open(contract_filename, 'rb'), as_attachment=True, filename=os.path.basename(contract_filename), content_type='application/pdf')
+        # Retornamos o arquivo como anexo, definindo o nome do arquivo no cabeçalho 'Content-Disposition'
+        return FileResponse(open(contract_filename, 'rb'), as_attachment=True, filename=filename, content_type='application/pdf')
 
     # Agora, se o request não for POST, o colaborador será buscado pelo parâmetro na URL:
     else:
@@ -224,8 +230,7 @@ def select_contract_id(request, collaborator_id):
         return render(request, 'select_contract_id.html', {'collaborator': collaborator, 'templates': templates})
 
 
-def convert_to_pdf(input_filepath, output_filepath):
-    convert(input_filepath, output_filepath)
+
 
 
 ########################################################################
