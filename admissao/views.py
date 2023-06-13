@@ -71,8 +71,22 @@ class AdmissaoCreateView(CreateView):
     success_url = reverse_lazy('admissao')  # substitua com a URL que você quer redirecionar após o sucesso
 
     def form_valid(self, form):
-        form.instance.created_by = self.request.user
-        return super().form_valid(form)
+        cpf = form.cleaned_data.get('cpf')
+        collaborator = get_object_or_404(Collaborator, cpf=cpf)
+        
+        if collaborator:
+            # Atualizar o objeto existente
+            for field, value in form.cleaned_data.items():
+                if value is not None and hasattr(collaborator, field) and field != 'created_by':
+                    setattr(collaborator, field, value)
+            collaborator.save()
+            self.object = collaborator
+        else:
+            if self.request.user.is_authenticated:
+                form.instance.created_by = self.request.user
+            self.object = form.save()
+        return HttpResponseRedirect(self.get_success_url())
+
 
 class AdmissaoRHCreateView(CreateView):
     model = Collaborator
