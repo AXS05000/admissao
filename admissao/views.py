@@ -20,17 +20,19 @@ from .models import Base, Collaborator, ContractTemplate, Departamento, Turno
 from .serializers import (BaseSerializer, DepartamentoSerializer,
                           TurnoSerializer)
 
+########################################################################
 
-class CollaboratorUpdateView(UpdateView):
-    model = Collaborator
-    template_name = 'collaborator_form.html'
-    fields = '__all__'
-    success_url = reverse_lazy('search_collaborator')
 
-class CollaboratorDetailView(DetailView):
-    model = Collaborator
-    template_name = 'collaborator_detail.html'  # substitua com o seu template
 
+
+
+
+
+
+
+########################################################################
+
+##########################BUSCA COLABORADOR#############################
 
 class CollaboratorSearchView(ListView):
     model = Collaborator
@@ -43,6 +45,25 @@ class CollaboratorSearchView(ListView):
         return Collaborator.objects.all()
 
 
+#############################ATUALIZAÇÃO################################
+
+
+class CollaboratorUpdateView(UpdateView):
+    model = Collaborator
+    template_name = 'collaborator_form.html'
+    fields = '__all__'
+    success_url = reverse_lazy('search_collaborator')
+
+
+############################DETALHAMENTO################################
+
+class CollaboratorDetailView(DetailView):
+    model = Collaborator
+    template_name = 'collaborator_detail.html'  # substitua com o seu template
+
+
+#######################ADMISSÃO COLABORADOR#############################
+
 class AdmissaoCreateView(CreateView):
     model = Collaborator
     form_class = Admissao
@@ -52,7 +73,7 @@ class AdmissaoCreateView(CreateView):
     def form_valid(self, form):
         form.instance.created_by = self.request.user
         return super().form_valid(form)
-    
+
 class AdmissaoRHCreateView(CreateView):
     model = Collaborator
     form_class = AdmissaoForm
@@ -69,43 +90,23 @@ class AdmissaoRHCreateView(CreateView):
                 messages.error(self.request, f"Erro no campo '{form.fields[field].label}': {error}")
         return super().form_invalid(form)
     
+########################################################################
 
-class DepartamentoList(generics.ListAPIView):
-    serializer_class = DepartamentoSerializer
-
-    def get_queryset(self):
-        cliente_gi_id = self.request.query_params.get('cliente_gi_id', None)
-        if cliente_gi_id is not None:
-            return Departamento.objects.filter(cliente_gi_dep=cliente_gi_id)
-        return Departamento.objects.none()
-
-class BaseList(generics.ListAPIView):
-    serializer_class = BaseSerializer
-
-    def get_queryset(self):
-        cliente_gi_id = self.request.query_params.get('cliente_gi_id', None)
-        if cliente_gi_id is not None:
-            return Base.objects.filter(cliente=cliente_gi_id)
-        return Base.objects.none()
-    
-class TurnoList(generics.ListAPIView):
-    serializer_class = TurnoSerializer
-
-    def get_queryset(self):
-        departamento_id = self.request.query_params.get('departamento_id', None)
-        if departamento_id is not None:
-            return Turno.objects.filter(departamento=departamento_id)
-        return Turno.objects.none()
     
 
 
 
 
-def convert_to_pdf(input_filepath, output_filepath):
-    convert(input_filepath, output_filepath)
 
 
 
+
+
+
+
+########################################################################
+
+##########################SUBIR TEMPLATE################################
 def upload_template(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
@@ -117,7 +118,9 @@ def upload_template(request):
         form = UploadFileForm()
     return render(request, 'upload.html', {'form': form})
 
+########################################################################
 
+####################GERAÇÃO DO CONTRATO EM PDF##########################
 
 def generate_contract(template, collaborator):
     # Load the Word document
@@ -207,3 +210,44 @@ def select_contract_id(request, collaborator_id):
 
         return render(request, 'select_contract_id.html', {'collaborator': collaborator, 'templates': templates})
 
+
+def convert_to_pdf(input_filepath, output_filepath):
+    convert(input_filepath, output_filepath)
+
+
+########################################################################
+
+
+###################CONFIGURAÇÕES PARA O FILTRO NO FORM##################
+
+
+class DepartamentoList(generics.ListAPIView):
+    serializer_class = DepartamentoSerializer
+
+    def get_queryset(self):
+        cliente_gi_id = self.request.query_params.get('cliente_gi_id', None)
+        if cliente_gi_id is not None:
+            return Departamento.objects.filter(cliente_gi_dep=cliente_gi_id)
+        return Departamento.objects.none()
+
+class BaseList(generics.ListAPIView):
+    serializer_class = BaseSerializer
+
+    def get_queryset(self):
+        cliente_gi_id = self.request.query_params.get('cliente_gi_id', None)
+        if cliente_gi_id is not None:
+            return Base.objects.filter(cliente=cliente_gi_id)
+        return Base.objects.none()
+    
+class TurnoList(generics.ListAPIView):
+    serializer_class = TurnoSerializer
+
+    def get_queryset(self):
+        departamento_id = self.request.query_params.get('departamento_id', None)
+        if departamento_id is not None:
+            return Turno.objects.filter(departamento=departamento_id)
+        return Turno.objects.none()
+
+
+
+############################################################################
