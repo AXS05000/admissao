@@ -134,3 +134,7 @@ footer .menu li a:hover{
 #copyright .nav-inline .nav-link:hover{
 	color: #e74c3c;
 }
+
+.bg-white .navbar-nav .nav-link:hover {
+	color: #e74c3c !important;
+  }

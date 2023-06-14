@@ -27,11 +27,11 @@ p {
 }
 
 a:hover, a:focus {
-  color: #F97794;
+  color: #f39c12;
 }
 
 a {
-  color: #F97794;
+  color: #f39c12;
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
@@ -73,7 +73,11 @@ a:not([href]):not([tabindex]):focus, a:not([href]):not([tabindex]):hover {
 }
 
 .bg-defult {
-  background: #F97794 !important;
+  background: #f39c12 !important;
+}
+
+.brand-logo {
+  content: var(--brand-image);
 }
 
 /* ==========================================================================
@@ -106,7 +110,7 @@ a:not([href]):not([tabindex]):focus, a:not([href]):not([tabindex]):hover {
   bottom: -8px;
   width: 80px;
   height: 2px;
-  background: #F97794;
+  background: #f39c12;
   -webkit-transition: 0.3s;
   -moz-transition: 0.3s;
   transition: 0.3s;
@@ -150,7 +154,7 @@ a:not([href]):not([tabindex]):focus, a:not([href]):not([tabindex]):hover {
 }
 
 .btn-common {
-  background-color: #F97794;
+  background-color: #f39c12;
   position: relative;
   z-index: 1;
   padding: 12px 32px;
@@ -194,7 +198,7 @@ a:not([href]):not([tabindex]):focus, a:not([href]):not([tabindex]):hover {
 
 .btn-border:hover {
   color: #ffffff;
-  background-color: #F97794;
+  background-color: #f39c12;
 }
 
 .btn-lg {
@@ -340,7 +344,7 @@ button:focus {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background-color: #F97794;
+  background-color: #f39c12;
   opacity: 0.6;
   position: absolute;
   top: 0;
@@ -393,7 +397,7 @@ button:focus {
   font-size: 14px;
   text-align: center;
   border-radius: 30px;
-  background-color: #F97794;
+  background-color: #f39c12;
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
@@ -410,7 +414,7 @@ button:focus {
   height: 100%;
   top: 0px;
   left: 0px;
-  background: #F97794;
+  background: #f39c12;
   opacity: 0.5;
   filter: alpha(opacity=80);
 }
@@ -459,11 +463,11 @@ button:focus {
 
 .menu-bg .menu-button:hover {
   cursor: pointer;
-  color: #F97794;
+  color: #f39c12;
 }
 
 .menu-bg .logo-menu a {
-  color: #F97794;
+  color: #f39c12;
 }
 
 .menu-bg .navbar-nav .nav-link {
@@ -471,11 +475,11 @@ button:focus {
 }
 
 .menu-bg .navbar-nav .nav-link:hover {
-  color: #F97794 !important;
+  color: #f39c12 !important;
 }
 
 .menu-bg .navbar-nav .active {
-  color: #F97794 !important;
+  color: #f39c12 !important;
 }
 
 .menu-button:hover {
@@ -496,11 +500,11 @@ button:focus {
 
 .bg-white .menu-button:hover {
   cursor: pointer;
-  color: #F97794;
+  color: #f39c12;
 }
 
 .bg-white .logo-menu a {
-  color: #F97794;
+  color: #f39c12;
 }
 
 .bg-white .navbar-nav .nav-link {
@@ -508,11 +512,11 @@ button:focus {
 }
 
 .bg-white .navbar-nav .nav-link:hover {
-  color: #F97794 !important;
+  color: #f39c12 !important;
 }
 
 .bg-white .navbar-nav .active {
-  color: #F97794 !important;
+  color: #f39c12 !important;
 }
 
 .close-button {
@@ -534,7 +538,7 @@ button:focus {
   left: 0;
   width: 0;
   height: 2px;
-  background: #F97794;
+  background: #f39c12;
   -webkit-transition: 0.3s;
   -moz-transition: 0.3s;
   transition: 0.3s;
@@ -552,7 +556,7 @@ button:focus {
 .navbar-expand-md .navbar-nav .nav-link:focus,
 .navbar-expand-md .navbar-nav .nav-link:hover,
 .navbar-expand-md .navbar-nav .nav-link:hover:before {
-  color: #F97794;
+  color: #f39c12;
 }
 
 .navbar-expand-md .navbar-nav .active > .nav-link,
@@ -560,11 +564,11 @@ button:focus {
 .navbar-expand-md .navbar-nav .nav-link.active:before,
 .navbar-expand-md .navbar-nav .nav-link.open,
 .navbar-expand-md .navbar-nav .open > .nav-link {
-  color: #F97794;
+  color: #f39c12;
 }
 
 .navbar-expand-md .navbar-toggler {
-  background: #F97794;
+  background: #f39c12;
   border-radius: 0px;
   margin: 5px;
   cursor: pointer;
@@ -596,8 +600,8 @@ button:focus {
 }
 
 .navbar-expand-md .navbar-toggler:active {
-  border: 1px solid #F97794;
-  color: #F97794;
+  border: 1px solid #f39c12;
+  color: #f39c12;
 }
 
 /* ==========================================================================
@@ -617,7 +621,7 @@ button:focus {
   height: 100%;
   top: 0px;
   left: 0px;
-  background: #F97794;
+  background: #f39c12;
   opacity: 0.7;
 }
 
@@ -665,7 +669,7 @@ button:focus {
 }
 
 .hero-area .banner_bottom_btn i:hover {
-  color: #F97794;
+  color: #f39c12;
 }
 
 .intro-img {
@@ -855,7 +859,7 @@ button:focus {
 }
 
 #video-area .banner_bottom_btn i:hover {
-  color: #F97794;
+  color: #f39c12;
 }
 
 /* ==========================================================================
@@ -879,7 +883,7 @@ button:focus {
 }
 
 #about .box-item .icon i {
-  color: #F97794;
+  color: #f39c12;
   display: inline-block;
   font-size: 36px;
   margin-bottom: 20px;
@@ -1053,8 +1057,8 @@ button:focus {
 }
 
 .controls .active {
-  color: #F97794 !important;
-  border-color: #F97794;
+  color: #f39c12 !important;
+  border-color: #f39c12;
   background: transparent;
 }
 
@@ -1143,6 +1147,7 @@ button:focus {
   webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
+  min-height: 290px;
 }
 
 .item-boxes .icon {
@@ -1152,7 +1157,7 @@ button:focus {
 .item-boxes .icon i {
   font-size: 30px;
   line-height: 60px;
-  color: #F97794;
+  color: #f39c12;
 }
 
 .item-boxes h4 {
@@ -1252,7 +1257,7 @@ button:focus {
 }
 
 .services-item .services-content h3 a:hover {
-  color: #F97794;
+  color: #f39c12;
 }
 
 .services-item:hover {
@@ -1306,7 +1311,7 @@ button:focus {
   font-size: 32px;
   text-align: center;
   margin-bottom: 30px;
-  color: #F97794;
+  color: #f39c12;
   transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   -webkit-transition: all 0.3s ease-in-out;
@@ -1325,7 +1330,7 @@ button:focus {
 }
 
 .featured-bg .featured-item h3 a:hover {
-  color: #F97794;
+  color: #f39c12;
 }
 
 /* ==========================================================================
@@ -1342,7 +1347,7 @@ button:focus {
 
 .featured-box .featured-icon i {
   font-size: 30px;
-  color: #F97794;
+  color: #f39c12;
   text-align: center;
   float: left;
   margin-right: 25px;
@@ -1444,7 +1449,7 @@ button:focus {
   line-height: 34px;
   text-align: center;
   width: 34px;
-  color: #F97794;
+  color: #f39c12;
   font-size: 14px;
   background: #fff;
   border-radius: 50px;
@@ -1518,7 +1523,7 @@ button:focus {
 }
 
 .testimonial-item .author .author-info h2 a:hover {
-  color: #F97794;
+  color: #f39c12;
 }
 
 .testimonial-item .content-inner {
@@ -1531,7 +1536,7 @@ button:focus {
 }
 
 .testimonial-item .content-inner span {
-  color: #F97794;
+  color: #f39c12;
 }
 
 .owl-pagination {
@@ -1565,7 +1570,7 @@ button:focus {
 }
 
 .owl-theme .owl-controls .owl-page.active span, .owl-theme .owl-controls.clickable .owl-page:hover span {
-  background: #F97794;
+  background: #f39c12;
 }
 
 /* ==========================================================================
@@ -1710,7 +1715,7 @@ button:focus {
   color: #fff;
   font-size: 24px;
   display: inline-block;
-  background: #F97794;
+  background: #f39c12;
   border-radius: 30px;
   -webkit-transition: all 0.2s linear;
   -moz-transition: all 0.2s linear;
@@ -1819,7 +1824,7 @@ button:focus {
 }
 
 #blog .blog-item-text h3 a:hover {
-  color: #F97794;
+  color: #f39c12;
 }
 
 .meta-tags {
@@ -1841,7 +1846,7 @@ button:focus {
 }
 
 .meta-tags span a:hover {
-  color: #F97794;
+  color: #f39c12;
 }
 
 /* ==========================================================================
@@ -1939,7 +1944,7 @@ button:focus {
 }
 
 .post-meta ul li a:hover {
-  color: #F97794;
+  color: #f39c12;
 }
 
 /* ==========================================================================
@@ -1959,7 +1964,7 @@ button:focus {
 }
 
 .form-control:focus {
-  border: 1px solid #F97794;
+  border: 1px solid #f39c12;
   outline: none;
   box-shadow: none;
 }
@@ -1978,7 +1983,7 @@ textarea {
 
 .contact-info i {
   font-size: 20px;
-  color: #F97794;
+  color: #f39c12;
 }
 
 .contact-info h5 {
@@ -2029,7 +2034,7 @@ textarea {
 .toggle-map {
   height: 5px;
   width: 100%;
-  background-color: #F97794;
+  background-color: #f39c12;
   bottom: 0px;
   text-align: center;
   position: absolute;
@@ -2044,7 +2049,7 @@ textarea {
   -webkit-border-radius: 100%;
   border-radius: 100%;
   background-color: #fff;
-  border: #F97794 3px solid;
+  border: #f39c12 3px solid;
   position: relative;
   top: -46px;
 }
@@ -2069,7 +2074,7 @@ textarea {
   transition: all 0.3s;
   z-index: 101;
   width: 100%;
-  border-top: #F97794 3px solid;
+  border-top: #f39c12 3px solid;
 }
 
 #google-map.panel-show {
@@ -2127,7 +2132,7 @@ textarea {
 .subscribe-form .form-wrapper .form-control:focus {
   color: #212121;
   background-color: #fff;
-  border-color: #F97794;
+  border-color: #f39c12;
   box-shadow: none;
   outline: 0;
 }
@@ -2150,7 +2155,7 @@ textarea {
 
 #subscribe .sub-item-box .icon-box i {
   font-size: 30px;
-  color: #F97794;
+  color: #f39c12;
 }
 
 #subscribe .sub-item-box .text-box {
@@ -2211,7 +2216,7 @@ footer .menu li a {
 }
 
 footer .menu li a:hover {
-  color: #F97794;
+  color: #f39c12;
 }
 
 .contact-footer {
@@ -2239,7 +2244,7 @@ footer .menu li a:hover {
 }
 
 .contact-footer li span a:hover {
-  color: #F97794;
+  color: #f39c12;
 }
 
 .instagram-footer {
@@ -2264,7 +2269,7 @@ footer .menu li a:hover {
 }
 
 .footer-social li a {
-  background-color: #F97794;
+  background-color: #f39c12;
   border-radius: 50%;
   color: #fff;
   height: 32px;
@@ -2310,7 +2315,7 @@ footer .menu li a:hover {
 }
 
 #copyright p a:hover {
-  color: #F97794;
+  color: #f39c12;
 }
 
 #copyright .nav-inline .nav-link {
@@ -2320,7 +2325,7 @@ footer .menu li a:hover {
 }
 
 #copyright .nav-inline .nav-link:hover {
-  color: #F97794;
+  color: #f39c12;
 }
 
 /* ==========================================================================
@@ -2375,7 +2380,7 @@ footer .menu li a:hover {
 
 .counter-item .icon i {
   font-size: 40px;
-  color: #F97794;
+  color: #f39c12;
 }
 
 .counter-item .fact-count h3 {

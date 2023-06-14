@@ -5,18 +5,30 @@ window.console = window.console || (function(){
 	return c;
 })();
 
-
 jQuery(document).ready(function($) {
 	"use strict"
-	
+
+	// Defina as URLs das imagens aqui
+    var imageUrls = {
+        "assets_2/css/colors/preset.css": "/static/assets/img/go2b-bi-rosa.png",
+        "assets_2/css/colors/blue.css": "/static/assets/img/go2b-bi-blue.png",
+        "assets_2/css/colors/turquoise.css": "/static/assets/img/go2b-bi-verde.png",
+        "assets_2/css/colors/orange.css": "/static/assets/img/go2b-bi.png",
+        "assets_2/css/colors/wisteria.css": "/static/assets/img/go2b-bi-roxo.png",
+        "assets_2/css/colors/alizarin.css": "/static/assets/img/go2b-bi-vermelho.png",
+
+    };
+
 	var themeColor = localStorage.getItem('themeColor');
 	if (themeColor) {
 		$("#colors").attr("href", window.STATIC_URL + themeColor);
+		$('.brand-logo').attr('src', imageUrls[themeColor]);
 	}
 	
 	function changeColor(colorPath) {
 		$("#colors" ).attr("href", window.STATIC_URL + colorPath);
 		localStorage.setItem('themeColor', colorPath);
+		$('.brand-logo').attr('src', imageUrls[colorPath]);
 		return false;
 	}
 

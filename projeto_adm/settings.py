@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'admissao',
+    'usuarios',
 ]
 
 MIDDLEWARE = [
@@ -79,7 +80,7 @@ WSGI_APPLICATION = 'projeto_adm.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'admissao_3',
+        'NAME': 'admissao_4',
         'USER': 'sa',
         'PASSWORD': '2241',
         'HOST': 'localhost',
@@ -135,3 +136,23 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = 'usuarios.CustomUsuario'
+
+
+LOGIN_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'login'
+LOGIN_URL = 'login'
+SESSION_COOKIE_AGE = 604800  # 1 semana
+""" SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SECURE = True
+
+
+SECURE_HSTS_SECONDS = True
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SUCURE_BROWSER_XSS_FILTER = True
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPNLY = True
+X_FRAME_OPTIONS = 'DENY'
+
+SECURE_SSL_REDIRECT = True """
