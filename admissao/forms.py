@@ -14,8 +14,8 @@ class UploadFileForm(forms.Form):
 class Admissao(forms.ModelForm):
     class Meta:
         model = Collaborator
-        fields = ['name', 'cpf', 'admission_date', 'rg', 'orgao_emissor_rg', 'uf_rg', 'data_emissao_rg', 'n_ctps', 'serie', 'uf_ctps', 'data_emissao_ctps', 'endereco', 'cep', 'celular', 'email']
-        requireds = ['name', 'cpf', 'admission_date', 'rg', 'orgao_emissor_rg', 'uf_rg', 'data_emissao_rg', 'n_ctps', 'serie', 'uf_ctps', 'data_emissao_ctps', 'endereco', 'cep', 'celular', 'email']
+        fields = ['name', 'cpf', 'rg', 'orgao_emissor_rg', 'uf_rg', 'data_emissao_rg', 'n_ctps', 'serie', 'uf_ctps', 'data_emissao_ctps', 'endereco', 'cep', 'celular', 'email']
+        requireds = ['name', 'cpf', 'rg', 'orgao_emissor_rg', 'uf_rg', 'data_emissao_rg', 'n_ctps', 'serie', 'uf_ctps', 'data_emissao_ctps', 'endereco', 'cep', 'celular', 'email']
 
 
 class AdmissaoForm(forms.ModelForm):
