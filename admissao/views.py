@@ -49,7 +49,7 @@ class CollaboratorSearchView(ListView):
 
 class CollaboratorUpdateView(UpdateView):
     model = Collaborator
-    template_name = 'collaborator_form.html'
+    template_name = 'formulario_adm_rh.html'
     fields = '__all__'
     success_url = reverse_lazy('search_collaborator')
 
@@ -71,7 +71,7 @@ class AdmissaoCreateView(CreateView):
 
     def form_valid(self, form):
         cpf = form.cleaned_data.get('cpf')
-        collaborator = get_object_or_404(Collaborator, cpf=cpf)
+        collaborator = Collaborator.objects.filter(cpf=cpf).first()
         
         if collaborator:
             # Atualizar o objeto existente
@@ -81,6 +81,7 @@ class AdmissaoCreateView(CreateView):
             collaborator.save()
             self.object = collaborator
         else:
+            # Criar um novo objeto
             if self.request.user.is_authenticated:
                 form.instance.created_by = self.request.user
             self.object = form.save()

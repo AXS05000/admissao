@@ -78,9 +78,9 @@ class Base(models.Model):
         ClienteGI, on_delete=models.SET_NULL, null=True, blank=True
     )
     salario = models.DecimalField(
-        'Salario', max_digits=18, decimal_places=2)
+        'Salario Hora', max_digits=18, decimal_places=2)
     salario_mes = models.DecimalField(
-        'Salario Mês', max_digits=18, decimal_places=2)
+        'Salario Mensal', max_digits=18, decimal_places=2)
     vt = models.DecimalField(
         'VT', max_digits=18, decimal_places=2)
     vr = models.DecimalField(
@@ -111,7 +111,7 @@ class Base(models.Model):
 class Collaborator(models.Model):
     name = models.CharField(max_length=200)
     cpf = models.CharField(max_length=14)
-    admission_date = models.DateField()
+    admission_date = models.DateField(null=True, blank=True)
     rg = models.CharField(max_length=20)
     orgao_emissor_rg = models.CharField(max_length=30)
     uf_rg = models.CharField(max_length=2)
