@@ -22,7 +22,7 @@ input, button, select, textarea {
     font: inherit;
 }
 
-.modal {
+.modal22 {
     width: 90%;
     max-width: 500px;
     margin-left: auto;
@@ -34,7 +34,7 @@ input, button, select, textarea {
     box-shadow: 0 5px 15px rgba(#000, .2); 
 }
 
-.modal-header {
+.modal22-header {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -68,15 +68,15 @@ input, button, select, textarea {
     }
 }
 
-.modal-body {
+.modal22-body {
     padding: 1rem 1.5rem;
 }
 
-.modal-title {
+.modal22-title {
     font-weight: 700;
 }
 
-.modal-description {
+.modal22-description {
     color: var(--c-text-secondary);
 }
 
@@ -124,7 +124,7 @@ input, button, select, textarea {
     }
 }
 
-.modal-footer {
+.modal22-footer {
     padding: 1rem 1.5rem 1.5rem;
     display: flex;
     justify-content: flex-end;
@@ -149,4 +149,95 @@ input, button, select, textarea {
 
 #fileInput {
     display: none;
+}
+
+
+.input-box {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1.1rem;
+}
+
+.input-box input {
+    margin: 0.6rem 0;
+    padding: 0.8rem 1.2rem;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 1px 1px 6px #0000001c;
+}
+
+.input-box input:hover {
+    background-color: #eeeeee75;
+}
+
+.input-box input:focus-visible {
+    outline: 1px solid rgb(255, 168, 68);
+}
+
+.input-box label,
+.gender-title h6 {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #000000c0;
+}
+
+.input-box input::placeholder {
+    color: #000000be;
+}
+
+.input-box input {
+    width: 39rem; /* Altera a largura do input para 70% da largura do container pai */
+
+}
+
+.login-button a {
+    text-decoration: none;
+    font-weight: 500;
+    color: #fff;
+  } 
+.btn-secondary{
+    text-decoration: none;
+}
+
+.btn-primary {
+    cursor: pointer;
+}
+
+.btn-secondary:active, .btn-primary:active {
+    color: inherit;
+}
+
+.btn-secondary:visited, .btn-primary:visited {
+    color: inherit;
+}
+
+
+.upload-area-title, .upload-area-description {
+    text-align: center;
+}
+
+.clique-aqui{
+    cursor: pointer;
+}
+
+
+/* Seu CSS atual */
+
+/* Adicionar esses estilos */
+.btn-primary:hover {
+    background-color: #ff9900; /* A cor que você quer quando o mouse passa por cima */
+    border-color: #ff9900;
+}
+
+.btn-primary:active {
+    background-color: #ff9900; /* A cor que você quer quando o botão é clicado */
+    border-color: #ff9900;
+}
+
+.clique-aqui:hover {
+    color: #ff9900; /* A cor que você quer quando o mouse passa por cima */
+}
+
+.clique-aqui:active {
+    color: #ff9900; /* A cor que você quer quando o link é clicado */
 }
