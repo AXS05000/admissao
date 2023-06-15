@@ -125,6 +125,23 @@
     color: #fff;
 }   
 
+.login-button a {
+  border: none;
+  background-color: rgb(235, 153, 47);
+  padding: 0.4rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.login-button a:hover {
+  background-color: rgb(255, 158, 47);
+}
+
+.login-button a {
+  text-decoration: none;
+  font-weight: 500;
+  color: #fff;
+} 
 
 /*Texto Cadastrar Notas*/
 
@@ -163,7 +180,6 @@
     border-radius: 10px;
     box-shadow: 1px 1px 6px #0000001c;
 }
-
 
 .input-box input:hover {
     background-color: #eeeeee75;
@@ -413,4 +429,21 @@
 
 }
 
+}
+
+
+
+.input-box-output {
+  margin: 0.6rem 0;
+  padding: 0.8rem 1.2rem;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 1px 1px 6px #0000001c;
+  background-color: #f0f0f0; /* adicionado para diferenciar do input */
+  min-width: 25rem; /* altere conforme necessário */
+  min-height: 24px; /* altere conforme necessário */
+}
+
+.pd-button-form{
+  margin: 0.1rem 0.5rem;
 }
