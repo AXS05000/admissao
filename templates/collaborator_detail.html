@@ -113,19 +113,19 @@
                               </div>
                               <div class="tipo-de-faturamento" id="div_id_cliente_gi">
                                 <div class="tipo-de-faturamento-1">Cliente GI:</div>
-                                <div class="input-box-output">{{ object.cliente_gi }}</div>
+                                <div class="input-box-output">{{ object.cliente_gi|default_if_none:"Sem Informação" }}</div>
                               </div>
                               <div class="tipo-de-faturamento" id="div_id_departamento">
                                 <div class="tipo-de-faturamento-1">Departamento:</div>
-                                <div class="input-box-output">{{ object.departamento }}</div>
+                                <div class="input-box-output">{{ object.departamento|default_if_none:"Sem Informação" }}</div>
                               </div>
                               <div class="tipo-de-faturamento" id="div_id_turno">
                                 <div class="tipo-de-faturamento-1">Turno:</div>
-                                <div class="input-box-output">{{ object.turno }}</div>
+                                <div class="input-box-output">{{ object.turno|default_if_none:"Sem Informação" }}</div>
                               </div>
                               <div class="tipo-de-faturamento" id="div_id_cargo">
                                 <div class="tipo-de-faturamento-1">Cargo:</div>
-                                <div class="input-box-output">{{ object.cargo }}</div>
+                                <div class="input-box-output">{{ object.cargo|default_if_none:"Sem Informação" }}</div>
                               </div>
                               <div class="tipo-de-faturamento" id="quantidade_vendida1">
                                 <div class="tipo-de-faturamento-1">Data de Admissão:</div>

@@ -71,10 +71,8 @@ class CollaboratorSearchView(ListView):
 
 
     def get_queryset(self):
-        query = self.request.GET.get('q')
-        if query:
-            return Collaborator.objects.filter(Q(cpf__icontains=query))
-        return Collaborator.objects.all()
+        queryset = super().get_queryset()
+        return queryset.order_by('-id')
 
 
 
