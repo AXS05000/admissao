@@ -1,16 +1,34 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Busque</title>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
+    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link id="pagestyle" href="https://demos.creative-tim.com/material-kit/assets/css/material-kit.min.css?v=3.0.4" rel="stylesheet" />
 </head>
 <body>
-    <form method="GET" action="{% url 'search_collaborator' %}">
-        <input type="text" name="q" placeholder="Buscar por CPF">
-        <input type="submit" value="Buscar">
-    </form>
-      
+
+
+    <div class="row text-center py-2 mt-3">
+      <div class="col-4 mx-auto">
+          <div class="input-group input-group-dynamic mb-4">
+              <span class="input-group-text"><i class="fas fa-search" aria-hidden="true"></i></span>
+              <form method="GET" action="{% url 'search_collaborator' %}" class="w-100">
+                  <input class="form-control" type="text" name="q" placeholder="Buscar por CPF">
+                  <input class="form-control" type="submit" placeholder="Buscar" style="display: none;">
+              </form>
+          </div>
+      </div>
+    </div>
+  
+
+
+
       <ul>
         {% for collaborator in object_list %}
           <li>
@@ -18,6 +36,48 @@
           </li>
         {% endfor %}
       </ul>
-      
+
+    <!-- Início da Paginação -->
+    <div class="row text-center py-2">
+      <div class="col-4 mx-auto">
+          <ul class="pagination pagination-primary m-4">
+              <!-- Se tem página anterior -->
+              {% if page_obj.has_previous %}
+                  <li class="page-item">
+                      <a class="page-link" href="?page=1" aria-label="Previous">
+                          <span aria-hidden="true"><i class="fa fa-angle-double-left" aria-hidden="true"></i></span>
+                      </a>
+                  </li>
+              {% endif %}
+              
+              <!-- Loop para exibir os números das páginas -->
+              {% for i in page_range %}
+              {% if page_obj.number == i %}
+                  <li class="page-item active">
+                      <a class="page-link" href="#">{{ i }}</a>
+                  </li>
+              {% else %}
+                  <li class="page-item">
+                      <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                  </li>
+              {% endif %}
+              {% endfor %}
+              
+              <!-- Se tem próxima página -->
+              {% if page_obj.has_next %}
+                  <li class="page-item">
+                      <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Next">
+                          <span aria-hidden="true"><i class="fa fa-angle-double-right" aria-hidden="true"></i></span>
+                      </a>
+                  </li>
+              {% endif %}
+          </ul>
+      </div>
+    </div>
+    <!-- Fim da Paginação -->
+  
+    <script src="{% static 'assets_3/js/core/popper.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'assets_3/js/core/bootstrap.min.js' %}" type="text/javascript"></script>
+    <script src="https://demos.creative-tim.com/material-kit/assets/js/material-kit.min.js?v=3.0.4" type="text/javascript"></script>   
 </body>
 </html>

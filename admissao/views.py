@@ -3,6 +3,7 @@ import os
 import pythoncom
 from django.conf import settings
 from django.contrib import messages
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
 from django.http import FileResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
@@ -33,15 +34,49 @@ from .serializers import (BaseSerializer, DepartamentoSerializer,
 
 ##########################BUSCA COLABORADOR#############################
 
+
+
+
 class CollaboratorSearchView(ListView):
     model = Collaborator
-    template_name = 'search_collaborator.html'  # substitua com o seu template
+    template_name = 'search_collaborator.html'
+    paginate_by = 2
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        page_obj = context['page_obj']
+
+        # Obtém o número da página atual
+        current_page = page_obj.number
+
+        # Se há mais de 5 páginas
+        if page_obj.paginator.num_pages > 5:
+            if current_page - 2 < 1:
+                start_page = 1
+                end_page = 5
+            elif current_page + 2 > page_obj.paginator.num_pages:
+                start_page = page_obj.paginator.num_pages - 4
+                end_page = page_obj.paginator.num_pages
+            else:
+                start_page = current_page - 2
+                end_page = current_page + 2
+        else:
+            start_page = 1
+            end_page = page_obj.paginator.num_pages
+
+        context['page_range'] = range(start_page, end_page + 1)
+
+        return context
+
+
 
     def get_queryset(self):
         query = self.request.GET.get('q')
         if query:
             return Collaborator.objects.filter(Q(cpf__icontains=query))
         return Collaborator.objects.all()
+
+
 
 
 #############################ATUALIZAÇÃO################################
