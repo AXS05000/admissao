@@ -9,7 +9,8 @@
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
-    <link id="pagestyle" href="https://demos.creative-tim.com/material-kit/assets/css/material-kit.min.css?v=3.0.4" rel="stylesheet" />
+
+    <link id="pagestyle" href="{% static 'css/paginacao.css' %}" rel="stylesheet" />
 </head>
 <body>
 
@@ -54,7 +55,7 @@
               {% for i in page_range %}
               {% if page_obj.number == i %}
                   <li class="page-item active">
-                      <a class="page-link" href="#">{{ i }}</a>
+                      <a class="page-link active-link" href="#">{{ i }}</a>
                   </li>
               {% else %}
                   <li class="page-item">
@@ -77,7 +78,6 @@
     <!-- Fim da Paginação -->
   
     <script src="{% static 'assets_3/js/core/popper.min.js' %}" type="text/javascript"></script>
-    <script src="{% static 'assets_3/js/core/bootstrap.min.js' %}" type="text/javascript"></script>
-    <script src="https://demos.creative-tim.com/material-kit/assets/js/material-kit.min.js?v=3.0.4" type="text/javascript"></script>   
+    <script src="{% static 'assets_3/js/core/bootstrap.min.js' %}" type="text/javascript"></script>  
 </body>
 </html>
