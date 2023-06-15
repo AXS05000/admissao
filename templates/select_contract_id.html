@@ -1,247 +1,267 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contrato</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-</head>
-<body>
-    <div id="loading" style="display: none;"></div>
-    <div id="content">
-        <form method="POST">
-            {% csrf_token %}
-            <select name="template">
-                {% for template in templates %}
-                    <option value="{{ template.id }}">{{ template.name }}</option>
-                {% endfor %}
-            </select>
-            <input type="submit" value="Salvar">
-        </form>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="keywords" content="Bootstrap, Landing page, Template, Registration, Landing">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Grayrids">
+    <title>GO2B BI</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'assets_2/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets_2/css/line-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'assets_2/css/owl.carousel.css' %}">
+    <link rel="stylesheet" href="{% static 'assets_2/css/owl.theme.css' %}">
+    <link rel="stylesheet" href="{% static 'assets_2/css/nivo-lightbox.css' %}">
+    <link rel="stylesheet" href="{% static 'assets_2/css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'assets_2/css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'assets_2/css/color-switcher.css' %}">
+    <link rel="stylesheet" href="{% static 'assets_2/css/menu_sideslide.css' %}">
+    <link rel="stylesheet" href="{% static 'assets_2/css/main.css' %}"> 
+    <link rel="stylesheet" href="{% static 'css/formulario.css' %}">    
+    <link rel="stylesheet" href="{% static 'assets_2/css/responsive.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'assets/img/go2b-bi.png' %}">
+  </head>
+  
+  <body>
+    <!-- Header Section Start -->
+    <header id="slider-area">  
+      <nav class="navbar navbar-expand-md fixed-top scrolling-navbar bg-white">
+        <div class="container">  
+          <a class="navbar-brand" href="{% url 'index' %}"><img class="brand-logo" src="{% static 'assets/img/go2b-bi.png' %}" alt="" style="max-height: 25px;">  GO2B-BI</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="lni-menu"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto w-100 justify-content-end">
+              <li class="nav-item">
+                <a class="nav-link page-scroll" href="{% url 'index' %}">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link page-scroll" href="#services">Serviços</a>
+              </li>  
+              <li class="nav-item">
+                <a class="nav-link page-scroll" href="#features">Características</a>
+              </li>                            
+              <li class="nav-item">
+                <a class="nav-link page-scroll" href="#portfolios">Trabalhos</a>
+              </li>            
+              <li class="nav-item">
+                <a class="nav-link page-scroll" href="#team">Time</a>
+              </li>    
+              <li class="nav-item">
+                <a class="nav-link page-scroll" href="{% url 'search_collaborator' %}">Candidatos</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link page-scroll" href="#admissao">Admissão</a>
+              </li>
+              {% if user.is_super_user %}
+              {% else %}
+              <li class="nav-item">
+                <a class="nav-link page-scroll" href="{% url 'upload_template' %}">Importar Template</a>
+              </li>
+              {% endif %} 
+              {% if user.is_anonymous %}
+              {% else %}
+              <li class="nav-item">
+                <a class="nav-link page-scroll" href="{% url 'logout' %}">Sair</a>
+              </li>
+              {% endif %}  
+
+            </ul>              
+          </div>
+        </div>
+      </nav> 
+
+
+    </header>
+    <!-- Header Section End --> 
+
+    <div class="form-container form-center container d-flex justify-content-center align-items-center">
+    <!-- Features Section Start -->
+    <section id="admissao" class="section">
+      <div class="container">
+        <div class="section-header">          
+          <h2 class="section-title">SELECIONE O CONTRATO:</h2>
+          <span>TEMPLATE</span>
+        </div>
+        <div class="row">
+          <form action="#" method="POST" class="form-horizontal container" autocomplete="off"
+          enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="form-header">
+              {% if form.errors %}
+
+                      {% for field in form %}
+                          {% for error in field.errors %}
+                              <div class="alert alert-danger alert-dismissible text-white" role="alert">
+                                  <span class="text-sm">{{ error }}</span>
+                                  <button type="button" class="btn-close text-lg py-3 opacity-10 cursor-pointer" data-bs-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                              </div>
+                          {% endfor %}
+                      {% endfor %}
+
+              {% endif %}
+
+              {% if messages %}
+                  {% for message in messages %}
+                  {% if message.tags == 'success' %}
+                      <div class="position-fixed bottom-1 end-1 z-index-2">
+                          <div class="toast fade show p-2 bg-white" role="alert" aria-live="assertive" id="successToast" aria-atomic="true">
+                              <div class="toast-header border-0">
+                                  <i class="material-icons text-success me-2">check</i>
+                                  <span class="me-auto font-weight-bold">Notificação do sistema</span>
+                                  <small class="text-body">1 seg atrás</small>
+                                  <i class="fas fa-times text-md ms-3 cursor-pointer" data-bs-dismiss="toast" aria-label="Close"></i>
+                              </div>
+                                  <hr class="horizontal dark m-0">
+                              <div class="toast-body">
+                                      {{ message }}<br>
+                              </div>
+                          </div>
+                      </div>
+                  {% elif message.tags == 'error' %}
+                      <div class="alert alert-danger alert-dismissible text-white" role="alert">
+                          <span class="text-sm">{{ message }}</span>
+                          <button type="button" class="btn-close text-lg py-3 opacity-10 cursor-pointer" data-bs-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+                  {% elif message.tags == 'warning' %}
+                      
+                      <div class="alert alert-info2 alert-dismissible text-white" role="alert">
+                          <span class="text-sm">{{ message }}</span>
+                          <button type="button" class="btn-close text-lg py-3 opacity-10 cursor-pointer" data-bs-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+                  {% else %}
+                    <li>{{ message }}</li>
+                  {% endif %}
+                  {% endfor %}
+              {% endif %}
+              <div class="input-group">
+                  <div class="input-box">
+                      <div class="select">
+                          <div id="camposAdicionais" class="select produto-quantidade">
+                              <div class="form-contratos" id="produto1">
+                                  <select name="template">
+                                    {% for template in templates %}
+                                        <option value="{{ template.id }}">{{ template.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="login-button">
+                                  <button type="submit" class="btn btn-primary">Salvar</button>
+                              </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+
+          </div>
+      </form>
+      </div>
+      </div>
+    </section>
     </div>
+    <!-- Features Section End -->   
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+      <!-- Copyright Start  -->
+      <div id="copyright">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="site-info float-left">
+                <p>Crafted by <a href="http://uideck.com" rel="nofollow">UIdeck</a></p>
+              </div>              
+              <div class="float-right">  
+                <ul class="nav nav-inline">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#">About Prime</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">TOS</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Return Policy</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">FAQ</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Copyright End -->
+
+    </footer>
+    <!-- Footer Section End --> 
+
+    <!-- Go To Top Link -->
+    <a href="#" class="back-to-top">
+      <i class="lni-arrow-up"></i>
+    </a>
+
+    <div id="loader">
+      <div class="spinner">
+        <div class="double-bounce1"></div>
+        <div class="double-bounce2"></div>
+      </div>
+    </div>    
+
+    <!-- jQuery first, then Tether, then Bootstrap JS. -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="{% static 'assets_2/js/jquery-min.js' %}"></script>
+    <script src="{% static 'assets_2/js/popper.min.js' %}"></script>
+    <script src="{% static 'assets_2/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'assets_2/js/classie.js' %}"></script>
+    <script src="{% static 'assets_2/js/color-switcher.js' %}"></script>
+    <script src="{% static 'assets_2/js/jquery.mixitup.js' %}"></script>
+    <script src="{% static 'assets_2/js/nivo-lightbox.js' %}"></script>
+    <script src="{% static 'assets_2/js/owl.carousel.js' %}"></script>    
+    <script src="{% static 'assets_2/js/jquery.stellar.min.js' %}"></script>    
+    <script src="{% static 'assets_2/js/jquery.nav.js' %}"></script>    
+    <script src="{% static 'assets_2/js/scrolling-nav.js' %}"></script>    
+    <script src="{% static 'assets_2/js/jquery.easing.min.js' %}"></script>     
+    <script src="{% static 'assets_2/js/wow.js' %}"></script> 
+    <script src="{% static 'assets_2/js/jquery.vide.js' %}"></script>
+    <script src="{% static 'assets_2/js/jquery.counterup.min.js' %}"></script>    
+    <script src="{% static 'assets_2/js/jquery.magnific-popup.min.js' %}"></script>    
+    <script src="{% static 'assets_2/js/waypoints.min.js' %}"></script>    
+    <script src="{% static 'assets_2/js/form-validator.min.js' %}"></script>
+    <script src="{% static 'assets_2/js/contact-form-script.js' %}"></script>   
+    <script src="{% static 'assets_2/js/main.js' %}"></script>
     <script>
-        $('form').on('submit', function(event) {
-            event.preventDefault();
-        
-            var form = $(this);
-        
-            $.ajax({
-                type: form.attr('method'),
-                url: form.attr('action'),
-                data: form.serialize(),
-                xhrFields: {
-                    responseType: 'blob'
-                },
-                beforeSend: function() {
-                    // Iniciar carregamento
-                    document.getElementById('loading').style.display = 'block';
-                    document.getElementById('content').style.display = 'none';
-                    document.getElementById('loading').innerHTML = `
-                                <style>
-                * {
-                    border: 0;
-                    box-sizing: border-box;
-                    margin: 0;
-                    padding: 0;
-                }
-                :root {
-                    --hue: 223;
-                    --bg: hsl(var(--hue),90%,90%);
-                    --fg: hsl(var(--hue),90%,10%);
-                    --trans-dur: 0.3s;
-                    font-size: calc(16px + (20 - 16) * (100vw - 320px) / (1280 - 320));
-                }
-                body {
-                    background-color: var(--bg);
-                    color: var(--fg);
-                    font: 1em/1.5 sans-serif;
-                    height: 100vh;
-                    display: grid;
-                    place-items: center;
-                    transition:
-                        background-color var(--trans-dur),
-                        color var(--trans-dur);
-                }
-                .smiley {
-                    width: 8em;
-                    height: 8em;
-                }
-                .smiley__eye1,
-                .smiley__eye2,
-                .smiley__mouth1,
-                .smiley__mouth2 {
-                    animation: eye1 3s ease-in-out infinite;
-                }
-                .smiley__eye1,
-                .smiley__eye2 {
-                    transform-origin: 64px 64px;
-                }
-                .smiley__eye2 {
-                    animation-name: eye2;
-                }
-                .smiley__mouth1 {
-                    animation-name: mouth1;
-                }
-                .smiley__mouth2 {
-                    animation-name: mouth2;
-                    visibility: hidden;
-                }
-                
-                /* Dark theme */
-                @media (prefers-color-scheme: dark) {
-                    :root {
-                        --bg: hsl(var(--hue),90%,10%);
-                        --fg: hsl(var(--hue),90%,90%);
-                    }
-                }
-                
-                /* Animations */
-                @keyframes eye1 {
-                    from {
-                        transform: rotate(-260deg) translate(0,-56px);
-                    }
-                    50%,
-                    60% {
-                        animation-timing-function: cubic-bezier(0.17,0,0.58,1);
-                        transform: rotate(-40deg) translate(0,-56px) scale(1);
-                    }
-                    to {
-                        transform: rotate(225deg) translate(0,-56px) scale(0.35);
-                    }
-                }
-                @keyframes eye2 {
-                    from {
-                        transform: rotate(-260deg) translate(0,-56px);
-                    }
-                    50% {
-                        transform: rotate(40deg) translate(0,-56px) rotate(-40deg) scale(1);
-                    }
-                    52.5% {
-                        transform: rotate(40deg) translate(0,-56px) rotate(-40deg) scale(1,0);
-                    }
-                    55%,
-                    70% {
-                        animation-timing-function: cubic-bezier(0,0,0.28,1);
-                        transform: rotate(40deg) translate(0,-56px) rotate(-40deg) scale(1);
-                    }
-                    to {
-                        transform: rotate(150deg) translate(0,-56px) scale(0.4);
-                    }
-                }
-                @keyframes eyeBlink {
-                    from,
-                    25%,
-                    75%,
-                    to {
-                        transform: scaleY(1);
-                    }
-                    50% {
-                        transform: scaleY(0);
-                    }
-                }
-                @keyframes mouth1 {
-                    from {
-                        animation-timing-function: ease-in;
-                        stroke-dasharray: 0 351.86;
-                        stroke-dashoffset: 0;
-                    }
-                    25% {
-                        animation-timing-function: ease-out;
-                        stroke-dasharray: 175.93 351.86;
-                        stroke-dashoffset: 0;
-                    }
-                    50% {
-                        animation-timing-function: steps(1,start);
-                        stroke-dasharray: 175.93 351.86;
-                        stroke-dashoffset: -175.93;
-                        visibility: visible;
-                    }
-                    75%,
-                    to {
-                        visibility: hidden;
-                    }
-                }
-                @keyframes mouth2 {
-                    from {
-                        animation-timing-function: steps(1,end);
-                        visibility: hidden;
-                    }
-                    50% {
-                        animation-timing-function: ease-in-out;
-                        visibility: visible;
-                        stroke-dashoffset: 0;
-                    }
-                    to {
-                        stroke-dashoffset: -351.86;
-                    }
-                }
-            </style>
-            <svg role="img" aria-label="Mouth and eyes come from 9:00 and rotate clockwise into position, right eye blinks, then all parts rotate and merge into 3:00" class="smiley" viewBox="0 0 128 128" width="128px" height="128px">
-                <defs>
-                    <clipPath id="smiley-eyes">
-                        <circle class="smiley__eye1" cx="64" cy="64" r="8" transform="rotate(-40,64,64) translate(0,-56)" />
-                        <circle class="smiley__eye2" cx="64" cy="64" r="8" transform="rotate(40,64,64) translate(0,-56)" />
-                    </clipPath>
-                    <linearGradient id="smiley-grad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#000" />
-                        <stop offset="100%" stop-color="#fff" />
-                    </linearGradient>
-                    <mask id="smiley-mask">
-                        <rect x="0" y="0" width="128" height="128" fill="url(#smiley-grad)" />
-                    </mask>
-                </defs>
-                <g stroke-linecap="round" stroke-width="12" stroke-dasharray="175.93 351.86">
-                    <g>
-                        <rect fill="hsl(193,90%,50%)" width="128" height="64" clip-path="url(#smiley-eyes)" />
-                        <g fill="none" stroke="hsl(193,90%,50%)">
-                            <circle class="smiley__mouth1" cx="64" cy="64" r="56" transform="rotate(180,64,64)" />
-                            <circle class="smiley__mouth2" cx="64" cy="64" r="56" transform="rotate(0,64,64)" />
-                        </g>
-                    </g>
-                    <g mask="url(#smiley-mask)">
-                        <rect fill="hsl(223,90%,50%)" width="128" height="64" clip-path="url(#smiley-eyes)" />
-                        <g fill="none" stroke="hsl(223,90%,50%)">
-                            <circle class="smiley__mouth1" cx="64" cy="64" r="56" transform="rotate(180,64,64)" />
-                            <circle class="smiley__mouth2" cx="64" cy="64" r="56" transform="rotate(0,64,64)" />
-                        </g>
-                    </g>
-                </g>
-            </svg>
-                    `;
-                },
-                success: function(blob, status, xhr) {
-                    // Parar carregamento
-                    document.getElementById('loading').style.display = 'none';
-                    document.getElementById('content').style.display = 'block';
-                    document.getElementById('loading').innerHTML = '';
-                
-                    // Vamos obter o nome do arquivo do cabeçalho 'Content-Disposition'
-                    var filename = "";
-                    var disposition = xhr.getResponseHeader('Content-Disposition');
-                    if (disposition && disposition.indexOf('attachment') !== -1) {
-                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-                        var matches = filenameRegex.exec(disposition);
-                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
-                    }
-                
-                    var link=document.createElement('a');
-                    link.href=window.URL.createObjectURL(blob);
-                    link.download=filename; // Aqui estamos utilizando o nome do arquivo que veio do servidor
-                    link.click();
-                },
-                error: function() {
-                    // Parar carregamento
-                    document.getElementById('loading').style.display = 'none';
-                    document.getElementById('content').style.display = 'block';
-                    document.getElementById('loading').innerHTML = '';
-
-                    // Trate aqui qualquer erro que possa ocorrer durante a requisição
-                }
-            });
-        });
+      window.STATIC_URL = "{% static '' %}";
     </script>
-
-</body>
+  </body>
 </html>

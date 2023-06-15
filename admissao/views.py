@@ -71,8 +71,11 @@ class CollaboratorSearchView(ListView):
 
 
     def get_queryset(self):
-        queryset = super().get_queryset()
-        return queryset.order_by('-id')
+        query = self.request.GET.get('q')
+        if query:
+            return Collaborator.objects.filter(Q(cpf__icontains=query)).order_by('-id')
+        return Collaborator.objects.all().order_by('-id')
+
 
 
 
