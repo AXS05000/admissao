@@ -58,11 +58,17 @@
                 <a class="nav-link page-scroll" href="#team">Time</a>
               </li>    
               <li class="nav-item">
-                <a class="nav-link page-scroll" href="#contact">Contato</a>
+                <a class="nav-link page-scroll" href="#busca">Candidatos</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link page-scroll" href="#admissao">Admissão</a>
+                <a class="nav-link page-scroll" href="{% url 'admissao' %}">Admissão</a>
               </li>
+              {% if user.is_super_user %}
+              {% else %}
+              <li class="nav-item">
+                <a class="nav-link page-scroll" href="{% url 'upload_template' %}">Importar Template</a>
+              </li>
+              {% endif %} 
               {% if user.is_anonymous %}
               {% else %}
               <li class="nav-item">
@@ -82,7 +88,7 @@
 
       
     <!-- Features Section Start -->
-    <section id="admissao" class="section">
+    <section id="busca" class="section">
       <div class="container">
         <div class="section-header">          
           <h2 class="section-title">BUSQUE O CANDIDATO:</h2>
