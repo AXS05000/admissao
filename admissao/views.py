@@ -40,7 +40,7 @@ from .serializers import (BaseSerializer, DepartamentoSerializer,
 class CollaboratorSearchView(ListView):
     model = Collaborator
     template_name = 'search_collaborator.html'
-    paginate_by = 2
+    paginate_by = 5
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
