@@ -241,3 +241,7 @@ input, button, select, textarea {
 .clique-aqui:active {
     color: #ff9900; /* A cor que você quer quando o link é clicado */
 }
+
+.btn-secondary:hover {
+    color: #e9e5ff;
+}
