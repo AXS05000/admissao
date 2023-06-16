@@ -16,7 +16,7 @@ from docx2pdf import convert
 from rest_framework import generics
 from zeep import Client
 
-from .forms import Admissao, AdmissaoForm, ConsultaForm, UploadFileForm
+from .forms import Admissao, AdmissaoForm, UploadFileForm
 from .models import Base, Collaborator, ContractTemplate, Departamento, Turno
 from .serializers import (BaseSerializer, DepartamentoSerializer,
                           TurnoSerializer)
