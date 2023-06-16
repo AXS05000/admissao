@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
-from django.http import FileResponse, HttpResponseRedirect
+from django.http import FileResponse, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.views.generic.detail import DetailView
@@ -14,20 +14,27 @@ from django.views.generic.list import ListView
 from docx import Document
 from docx2pdf import convert
 from rest_framework import generics
+from zeep import Client
 
-from .forms import Admissao, AdmissaoForm, UploadFileForm
+from .forms import Admissao, AdmissaoForm, ConsultaForm, UploadFileForm
 from .models import Base, Collaborator, ContractTemplate, Departamento, Turno
 from .serializers import (BaseSerializer, DepartamentoSerializer,
                           TurnoSerializer)
 
 ########################################################################
 
-
-
-
-
-
-
+def consulta(request):
+    if request.method == "POST":
+        form = ConsultaForm(request.POST)
+        if form.is_valid():
+            wsdl = 'https://nfe.osasco.sp.gov.br/EISSNFEWebServices/NotaFiscalEletronica.svc?wsdl'
+            client = Client(wsdl)
+            response = client.service.Consultar(form.cleaned_data)
+            notas = response['NotasGeradas']['NotaFiscalConsultaDTO']
+            return render(request, 'testeapi.html', {'form': form, 'notas': notas})
+    else:
+        form = ConsultaForm()
+    return render(request, 'testeapi.html', {'form': form})
 
 
 ########################################################################

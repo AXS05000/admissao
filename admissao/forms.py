@@ -6,6 +6,21 @@ from .models import (Base, ClienteGI, Collaborator, ContractTemplate,
                      Departamento)
 
 
+class ConsultaForm(forms.Form):
+    ChaveAutenticacao = forms.CharField(max_length=100)
+    DataFinal = forms.DateField(required=False)
+    DataInicial = forms.DateField(required=False)
+    NumeroReciboFinal = forms.IntegerField(required=False)
+    NumeroReciboInicial = forms.IntegerField(required=False)
+    NumeroReciboUnico = forms.IntegerField(required=False)
+
+
+
+
+
+
+
+
 class TemplateSelectForm(forms.Form):
     template = forms.ModelChoiceField(queryset=ContractTemplate.objects.all())
 
