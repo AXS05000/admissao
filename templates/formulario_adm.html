@@ -1,3 +1,4 @@
+{% load filters %}
 {% load static %}
 
 <!DOCTYPE html>
@@ -162,11 +163,11 @@
                               </div>
                               <div class="tipo-de-faturamento" id="quantidade_vendida7">
                                 <div class="tipo-de-faturamento-1">Celular:</div>
-                                <div class="tipo-de-faturamento-1">{{ form.celular }}</div>
+                                <div class="tipo-de-faturamento-1">{{ form.celular|addattrs:"id=celular" }}</div>
                               </div>
                               <div class="tipo-de-faturamento" id="quantidade_vendida1">
                                   <div class="tipo-de-faturamento-1">CPF:</div>
-                                  <div class="tipo-de-faturamento-1">{{ form.cpf }}</div>
+                                  <div class="tipo-de-faturamento-1">{{ form.cpf|addattrs:"id=cpf" }}</div>
                               </div>
                               <div class="tipo-de-faturamento" id="quantidade_vendida2">
                                   <div class="tipo-de-faturamento-1">RG:</div>
@@ -202,7 +203,7 @@
                               </div>
                               <div class="form-contratos" id="produto7">
                                   <div class="comp-nota-1">CEP:</div>
-                                  <div class="comp-nota-1">{{ form.cep }}</div>
+                                  <div class="comp-nota-1">{{ form.cep|addattrs:"id=cep" }}</div>
                               </div>
                               <div class="tipo-de-faturamento" id="quantidade_vendida6">
                                 <div class="tipo-de-faturamento-1">Endereço:</div>
@@ -315,6 +316,122 @@
     <script>
       window.STATIC_URL = "{% static '' %}";
     </script>
+    <script>
+      function formatar(mascara, documento) {
+        var i = 0;
+        var valor = documento.value.replace(/\D/g, '');
+        var formatado = '';
+      
+        for (var m = 0; m < mascara.length; m++) {
+          if (mascara[m] === '#') {
+            if (valor[i] !== undefined) {
+              formatado += valor[i++];
+            }
+          } else {
+            formatado += mascara[m];
+          }
+        }
+      
+        documento.value = formatado;
+      }
+    
+      document.getElementById('cpf').addEventListener('input', function() {
+        var cpf = this.value.replace(/\D/g, '');
+        var mascara = '###.###.###-##';
+    
+        if (cpf.length <= 3) {
+          mascara = '###';
+        } else if (cpf.length <= 6) {
+          mascara = '###.###';
+        } else if (cpf.length <= 9) {
+          mascara = '###.###.###';
+        }
+    
+        formatar(mascara, this);
+      });
+    
+      document.getElementById('celular').addEventListener('input', function() {
+        var celular = this.value.replace(/\D/g, '');
+        var mascara = '## #####-####';
+    
+        if (celular.length <= 6) {
+          mascara = '## ####-####';
+        }
+    
+        formatar(mascara, this);
+      });
+    
+      document.getElementById('cep').addEventListener('input', function() {
+        var cep = this.value.replace(/\D/g, '');
+        var mascara = '#####-###';
+    
+        if (cep.length <= 5) {
+          mascara = '#####';
+        } else if (cep.length > 5) {
+          mascara = '#####-###';
+        }
+    
+        formatar(mascara, this);
+      });
+    
+      document.getElementById('cpf').addEventListener('keydown', function(event) {
+        if (event.keyCode === 8) { // Tecla "Backspace"
+          event.preventDefault();
+          var value = this.value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+          this.value = value.substring(0, value.length - 1); // Remove o último caractere
+    
+          var cpf = this.value.replace(/\D/g, '');
+          var mascara = '###.###.###-##';
+    
+          if (cpf.length <= 3) {
+            mascara = '###';
+          } else if (cpf.length <= 6) {
+            mascara = '###.###';
+          } else if (cpf.length <= 9) {
+            mascara = '###.###.###';
+          }
+    
+          formatar(mascara, this);
+        }
+      });
+    
+      document.getElementById('celular').addEventListener('keydown', function(event) {
+        if (event.keyCode === 8) { // Tecla "Backspace"
+          event.preventDefault();
+          var value = this.value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+          this.value = value.substring(0, value.length - 1); // Remove o último caractere
+    
+          var celular = this.value.replace(/\D/g, '');
+          var mascara = '## #####-####';
+    
+          if (celular.length <= 6) {
+            mascara = '## ####-####';
+          }
+    
+          formatar(mascara, this);
+        }
+      });
+    
+      document.getElementById('cep').addEventListener('keydown', function(event) {
+        if (event.keyCode === 8) { // Tecla "Backspace"
+          event.preventDefault();
+          var value = this.value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+          this.value = value.substring(0, value.length - 1); // Remove o último caractere
+    
+          var cep = this.value.replace(/\D/g, '');
+          var mascara = '#####-###';
+    
+          if (cep.length <= 5) {
+            mascara = '#####';
+          } else if (cep.length > 5) {
+            mascara = '#####-###';
+          }
+    
+          formatar(mascara, this);
+        }
+      });
+    </script>
+    
     
   </body>
 </html>

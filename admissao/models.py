@@ -168,7 +168,7 @@ STATE_CHOICES = [
 
 class Collaborator(models.Model):
     name = models.CharField(max_length=200)
-    cpf = models.CharField(max_length=11)
+    cpf = models.CharField(max_length=14)
     admission_date = models.DateField(null=True, blank=True)
     rg = models.CharField(max_length=20)
     orgao_emissor_rg = models.CharField(max_length=150, choices=ORGANIZATION_CHOICES)
@@ -179,8 +179,8 @@ class Collaborator(models.Model):
     uf_ctps = models.CharField(max_length=2, choices=STATE_CHOICES)
     data_emissao_ctps = models.DateField()
     endereco = models.CharField(max_length=250)
-    cep = models.CharField(max_length=8)
-    celular = models.CharField(max_length=11)
+    cep = models.CharField(max_length=9)
+    celular = models.CharField(max_length=13)
     email = models.CharField(max_length=250)
     cargo = models.ForeignKey(
         Base, on_delete=models.SET_NULL, null=True, blank=True
