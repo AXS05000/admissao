@@ -23,18 +23,16 @@ from .serializers import (BaseSerializer, DepartamentoSerializer,
 
 ########################################################################
 
-def consulta(request):
-    if request.method == "POST":
-        form = ConsultaForm(request.POST)
-        if form.is_valid():
-            wsdl = 'https://nfe.osasco.sp.gov.br/EISSNFEWebServices/NotaFiscalEletronica.svc?wsdl'
-            client = Client(wsdl)
-            response = client.service.Consultar(form.cleaned_data)
-            notas = response['NotasGeradas']['NotaFiscalConsultaDTO']
-            return render(request, 'testeapi.html', {'form': form, 'notas': notas})
-    else:
-        form = ConsultaForm()
-    return render(request, 'testeapi.html', {'form': form})
+
+
+
+
+
+
+
+
+
+
 
 
 ########################################################################

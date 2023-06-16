@@ -16,7 +16,6 @@ urlpatterns = [
     path('candidatos/', views.CollaboratorSearchView.as_view(), name='search_collaborator'),
     path('colaborador/<int:pk>/', views.CollaboratorDetailView.as_view(), name='collaborator_detail'),
     path('editar/<int:pk>/', views.CollaboratorUpdateView.as_view(), name='edit_collaborator'),
-    path('teste/', views.consulta, name='teste'),
 
 
 ]
