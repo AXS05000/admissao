@@ -122,6 +122,23 @@ class AdmissaoCreateView(CreateView):
                 form.instance.created_by = self.request.user
             self.object = form.save()
         return HttpResponseRedirect(self.get_success_url())
+    
+    def validate_cpf(value):
+        if len(value) != 11 or not value.isdigit():
+            return False
+        cpf = [int(char) for char in value]
+        if cpf == cpf[::-1]:
+            return False
+        for i in range(9):
+            val = sum((cpf[num] * ((10-i) % 11)) for num in range(0, 10))
+            digit = ((val * 10) % 11) % 10
+            if digit != cpf[9]:
+                return False
+        val = sum((cpf[num] * ((11-i) % 11)) for num in range(0, 11))
+        digit = ((val * 10) % 11) % 10
+        if digit != cpf[10]:
+            return False
+        return True
 
 
 class AdmissaoRHCreateView(CreateView):
