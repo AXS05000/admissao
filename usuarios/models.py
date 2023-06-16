@@ -35,6 +35,8 @@ class CustomUsuario(AbstractUser):
     email = models.EmailField('E-mail', unique=True)
     fone = models.CharField('Telefone', max_length=15)
     is_staff = models.BooleanField('Membro da equipe', default=True)
+    login_attempts = models.IntegerField(default=0)
+    lockout_until = models.DateTimeField(null=True, blank=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name', 'fone']
 
