@@ -108,20 +108,78 @@ class Base(models.Model):
         }
     
 
+
+
+ORGANIZATION_CHOICES = [
+    ('SSP', 'Secretaria de Segurança Pública'),
+    ('PM', 'Polícia Militar'),
+    ('PC', 'Polícia Civil'),
+    ('FGTS', 'Fundo de Garantia do Tempo de Serviço'),
+    ('IFP', 'Instituto Félix Pacheco'),
+    ('IPF', 'Instituto Pereira Faustino'),
+    ('IMESP', 'Instituto de Identificação Ricardo Gumbleton Daunt'),
+    ('ITI', 'Instituto de Identificação Tobias de Aguiar'),
+    ('DETRAN', 'Departamento de Trânsito'),
+    ('CTPS', 'Carteira de Trabalho e Previdência Social'),
+    ('FIDENE', 'Fundação de Integração e Desenvolvimento do Ensino do Noroeste do Estado'),
+    ('ME', 'Ministério do Exército'),
+    ('MEX', 'Ministério do Exército'),
+    ('MTE', 'Ministério do Trabalho e Emprego'),
+    ('PF', 'Polícia Federal'),
+    ('POM', 'Polícia Militar'),
+    ('SD/SG', 'Serviço Discreto / Secretaria Geral'),
+    ('SNJ', 'Secretaria Nacional de Justiça'),
+    ('SSPDS', 'Secretaria de Segurança Pública e Defesa da Sociedade'),
+    ('STF', 'Supremo Tribunal Federal'),
+    ('STM', 'Superior Tribunal Militar')
+]
+
+
+STATE_CHOICES = [
+    ('AC', 'Acre'),
+    ('AL', 'Alagoas'),
+    ('AP', 'Amapá'),
+    ('AM', 'Amazonas'),
+    ('BA', 'Bahia'),
+    ('CE', 'Ceará'),
+    ('DF', 'Distrito Federal'),
+    ('ES', 'Espírito Santo'),
+    ('GO', 'Goiás'),
+    ('MA', 'Maranhão'),
+    ('MT', 'Mato Grosso'),
+    ('MS', 'Mato Grosso do Sul'),
+    ('MG', 'Minas Gerais'),
+    ('PA', 'Pará'),
+    ('PB', 'Paraíba'),
+    ('PR', 'Paraná'),
+    ('PE', 'Pernambuco'),
+    ('PI', 'Piauí'),
+    ('RJ', 'Rio de Janeiro'),
+    ('RN', 'Rio Grande do Norte'),
+    ('RS', 'Rio Grande do Sul'),
+    ('RO', 'Rondônia'),
+    ('RR', 'Roraima'),
+    ('SC', 'Santa Catarina'),
+    ('SP', 'São Paulo'),
+    ('SE', 'Sergipe'),
+    ('TO', 'Tocantins'),
+]
+
+
 class Collaborator(models.Model):
     name = models.CharField(max_length=200)
-    cpf = models.CharField(max_length=14)
+    cpf = models.CharField(max_length=11)
     admission_date = models.DateField(null=True, blank=True)
     rg = models.CharField(max_length=20)
-    orgao_emissor_rg = models.CharField(max_length=30)
-    uf_rg = models.CharField(max_length=2)
+    orgao_emissor_rg = models.CharField(max_length=150, choices=ORGANIZATION_CHOICES)
+    uf_rg = models.CharField(max_length=2, choices=STATE_CHOICES)
     data_emissao_rg = models.DateField()
-    n_ctps = models.CharField(max_length=30)
-    serie = models.CharField(max_length=30)
-    uf_ctps = models.CharField(max_length=2)
+    n_ctps = models.CharField(max_length=7)
+    serie = models.CharField(max_length=5)
+    uf_ctps = models.CharField(max_length=2, choices=STATE_CHOICES)
     data_emissao_ctps = models.DateField()
     endereco = models.CharField(max_length=250)
-    cep = models.CharField(max_length=30)
+    cep = models.CharField(max_length=8)
     celular = models.CharField(max_length=11)
     email = models.CharField(max_length=250)
     cargo = models.ForeignKey(
