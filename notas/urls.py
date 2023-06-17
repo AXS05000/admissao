@@ -15,13 +15,10 @@ urlpatterns = [
     path('notafiscal7/', views.notafiscal7, name='notafiscal7'),
     path('notafiscal8/', views.notafiscal8, name='notafiscal8'),
     path('gestao/cliente/<int:cliente_id>/', views.cliente, name='cliente'),
-    path('gestao/<int:id>/', views.notafiscalindividual, name='nota-individual'),
-    path('login/', views.login, name='login'),
-    path('gestao/search/', views.search, name='search'),
     path('cnpj/', views.cnpj, name='cnpj'),
     path('fatoutros/', views.fatoutros, name='fatoutros'),
     path('atualizar-cnpj/', views.update_basecnpj, name='atualizar_cnpj'),
     path('importar-cnpj/', views.import_basecnpj, name='importar_basecnpj'),
-
-    
+    path('generate-csv/', views.generate_csv, name='generate-csv'),
+    path('gerar-csv/', views.gerarcsv_template, name='gerar-csv'),    
 ]

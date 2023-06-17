@@ -164,6 +164,30 @@ class Notas(models.Model):
 
     @property
     def total_quantidade_de_horas(self):
-        return self.quantidade_hora * self.baseinfocontratos.valor_hora + self.quantidade_hora2 * self.baseinfocontratos2.valor_hora + self.quantidade_hora3 * self.baseinfocontratos3.valor_hora + self.quantidade_hora4 * self.baseinfocontratos4.valor_hora + self.quantidade_hora5 * self.baseinfocontratos5.valor_hora + self.quantidade_hora6 * self.baseinfocontratos6.valor_hora + self.quantidade_hora7 * self.baseinfocontratos7.valor_hora + self.quantidade_hora8 * self.baseinfocontratos8.valor_hora
+        total = 0
+        # Para baseinfocontratos sem número, ou seja, a primeira instância
+        if self.baseinfocontratos and self.quantidade_hora:
+            total += self.baseinfocontratos.valor_hora * self.quantidade_hora
+        # Para baseinfocontratos2 até baseinfocontratos8
+        for i in range(2, 9):
+            quantidade_hora = getattr(self, f'quantidade_hora{i}', 0)
+            baseinfocontratos = getattr(self, f'baseinfocontratos{i}', None)
+            if quantidade_hora and baseinfocontratos:
+                total += quantidade_hora * baseinfocontratos.valor_hora
+        return int(total * 100)
     
+    @property
+    def total_a_faturar(self):
+        total = 0
+        # Para baseinfocontratos sem número, ou seja, a primeira instância
+        if self.baseinfocontratos and self.quantidade_hora:
+            total += self.baseinfocontratos.valor_hora * self.quantidade_hora
+        # Para baseinfocontratos2 até baseinfocontratos8
+        for i in range(2, 9):
+            quantidade_hora = getattr(self, f'quantidade_hora{i}', 0)
+            baseinfocontratos = getattr(self, f'baseinfocontratos{i}', None)
+            if quantidade_hora and baseinfocontratos:
+                total += quantidade_hora * baseinfocontratos.valor_hora
+        return int(total)
+
 
