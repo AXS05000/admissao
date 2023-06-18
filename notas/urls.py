@@ -1,7 +1,7 @@
 from django.urls import path
 
 from . import views
-from .views import GestaoListView, NotaFiscalCreateView
+from .views import GerarcsvTemplateView, GestaoListView, NotaFiscalCreateView
 
 urlpatterns = [
     path('notafiscal/', NotaFiscalCreateView.as_view(), name='notafiscal'),
@@ -20,5 +20,6 @@ urlpatterns = [
     path('atualizar-cnpj/', views.update_basecnpj, name='atualizar_cnpj'),
     path('importar-cnpj/', views.import_basecnpj, name='importar_basecnpj'),
     path('generate-csv/', views.generate_csv, name='generate-csv'),
-    path('gerar-csv/', views.gerarcsv_template, name='gerar-csv'),    
+    path('gerar-csv/', GerarcsvTemplateView.as_view(), name='gerar-csv'),
+    path('generate-csv-for-nota/<int:pk>', views.generate_csv_for_nota, name='generate_csv_for_nota'),    
 ]

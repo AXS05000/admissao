@@ -188,6 +188,6 @@ class Notas(models.Model):
             baseinfocontratos = getattr(self, f'baseinfocontratos{i}', None)
             if quantidade_hora and baseinfocontratos:
                 total += quantidade_hora * baseinfocontratos.valor_hora
-        return int(total)
+        return total
 
 

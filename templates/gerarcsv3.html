@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV</title>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+          <table>
+            <tr>
+              <th>Selecionar</th>
+              <th>ID da nota</th>
+              <th>Total a faturar</th>
+              <th>Nome do cliente</th>
+              <th>Unidade</th>
+              <th>Competência da nota</th>
+              <th>Editar</th>
+              <th>Gerar CSV</th>
+            </tr>
+            {% for nota in page_obj %}
+            <tr>
+              <td><input type="checkbox" name="notas" value="{{ nota.id }}"></td>
+              <td>{{ nota.id }}</td>
+              <td>{{ nota.total_a_faturar }}</td>
+              <td>{{ nota.cnpj_da_nota.nome_cliente }}</td>
+              <td>{{ nota.cnpj_da_nota.unidade }}</td>
+              <td>{{ nota.competencia_nota }}</td>
+              <td><a href="#">Editar</a></td>
+              <td><a href="#">Gerar CSV</a></td>
+            </tr>
+            {% endfor %}
+          </table>
+          <button type="submit">Gerar CSV para selecionados</button>
+        </form>
+        
+</body>
+</html>
