@@ -148,6 +148,8 @@ class Notas_FiscaisView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['q'] = self.request.GET.get('q', '')
+        context['order_by'] = self.request.GET.get('order_by', '-numero')
         page_obj = context['page_obj']
 
         # Obtém o número da página atual
@@ -176,16 +178,16 @@ class Notas_FiscaisView(ListView):
 
     def get_queryset(self):
         query = self.request.GET.get('q')
+        order_by = self.request.GET.get('order_by', '-numero')
         if query:
             try:
-                date_query = datetime.strptime(query, '%d/%m/%Y').date()  # Ajustando o formato aqui
-                return NotaFiscal2.objects.filter(Q(data_emissao=date_query)).order_by('-numero')
-            except ValueError:  # Captura a exceção se a data for inválida
-                # Aqui você pode lidar com a situação onde a data é inválida, por exemplo, verificando se 'q' corresponde a uma unidade ou nome de cliente
-                notas_by_cnpj = NotaFiscal2.objects.filter(doc_tomador__icontains=query).order_by('-numero')
-                notas_by_nome_cliente = NotaFiscal2.objects.filter(nome_tomador__icontains=query).order_by('-numero')
-                return (notas_by_cnpj | notas_by_nome_cliente)  # Retorna a união dos dois conjuntos de notas
-        return NotaFiscal2.objects.all().order_by('-numero')
+                date_query = datetime.strptime(query, '%d/%m/%Y').date()  
+                return NotaFiscal2.objects.filter(Q(data_emissao=date_query)).order_by(order_by)
+            except ValueError:
+                notas_by_cnpj = NotaFiscal2.objects.filter(doc_tomador__icontains=query).order_by(order_by)
+                notas_by_nome_cliente = NotaFiscal2.objects.filter(nome_tomador__icontains=query).order_by(order_by)
+                return (notas_by_cnpj | notas_by_nome_cliente)
+        return NotaFiscal2.objects.all().order_by(order_by)
     
 
 

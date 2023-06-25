@@ -50,16 +50,16 @@
                 <a class="nav-link page-scroll" href="#services">Serviços</a>
               </li>  
               <li class="nav-item">
-                <a class="nav-link page-scroll" href="#notas">Notas Fiscais</a>
-              </li>                            
+                <a class="nav-link page-scroll" href="{% url 'gerar-csv' %}">Notas Fiscais</a>
+              </li>                             
               <li class="nav-item">
-                <a class="nav-link page-scroll" href="#portfolios">Trabalhos</a>
+                <a class="nav-link page-scroll" href="#notasportal">Notas Portal</a>
               </li>            
               <li class="nav-item">
                 <a class="nav-link page-scroll" href="#team">Time</a>
               </li>    
               <li class="nav-item">
-                <a class="nav-link page-scroll" href="#busca">Candidatos</a>
+                <a class="nav-link page-scroll" href="{% url 'search_collaborator' %}">Candidatos</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link page-scroll" href="{% url 'admissao' %}">Admissão</a>
@@ -89,11 +89,11 @@
 
       
     <!-- Features Section Start -->
-    <section id="notas" class="section">
+    <section id="notasportal" class="section">
       <div class="container">
         <div class="section-header">          
           <h2 class="section-title">BUSQUE AS NOTAS:</h2>
-          <span>FISCAIS</span>
+          <span>PORTAL OSASCO</span>
         </div>
         <div class="row">
           <div class="row text-center py-2 mt-3">
@@ -134,7 +134,7 @@
                 {% endfor %}
               </table>
               <div class="login-button">
-                <button type="submit" class="btn btn-primary">Gerar TXT ABC para selecionados</button>
+                <button type="submit" class="btn btn-primary">Gerar TXT ABC</button>
               </div>
             </form>
 
@@ -149,34 +149,33 @@
                   {% if page_obj.object_list|length > 0 %}
                   {% if page_obj.has_previous %}
                       <li class="page-item">
-                          <a class="page-link" href="?page=1" aria-label="Previous">
+                          <a class="page-link" href="?page=1&q={{ q }}&order_by={{ order_by }}" aria-label="Previous">
                               <span aria-hidden="true"><i class="fa fa-angle-double-left" aria-hidden="true"></i></span>
                           </a>
                       </li>
                   {% endif %}
-                  
                   <!-- Loop para exibir os números das páginas -->
                   {% for i in page_range %}
-                  {% if page_obj.number == i %}
-                      <li class="page-item active">
-                          <a class="page-link active-link" href="#">{{ i }}</a>
-                      </li>
-                  {% else %}
-                      <li class="page-item">
-                          <a class="page-link" href="?page={{ i }}">{{ i }}</a>
-                      </li>
-                  {% endif %}
+                      {% if page_obj.number == i %}
+                          <li class="page-item active">
+                              <a class="page-link active-link" href="#">{{ i }}</a>
+                          </li>
+                      {% else %}
+                          <li class="page-item">
+                              <a class="page-link" href="?page={{ i }}&q={{ q }}&order_by={{ order_by }}">{{ i }}</a>
+                          </li>
+                      {% endif %}
                   {% endfor %}
-                  
                   <!-- Se tem próxima página -->
                   {% if page_obj.has_next %}
                       <li class="page-item">
-                          <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Next">
+                          <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&q={{ q }}&order_by={{ order_by }}" aria-label="Next">
                               <span aria-hidden="true"><i class="fa fa-angle-double-right" aria-hidden="true"></i></span>
                           </a>
                       </li>
                   {% endif %}
                   {% endif %}
+                  
               </ul>
           </div>
         </div>
