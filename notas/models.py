@@ -191,3 +191,32 @@ class Notas(models.Model):
         return total
 
 
+
+
+
+
+
+
+
+
+
+class NotaFiscal2(models.Model):
+    aliquota = models.FloatField(null=True, blank=True)
+    cod_atividade = models.CharField(max_length=200,null=True, blank=True)
+    cod_obra = models.CharField(max_length=200,null=True, blank=True)
+    codigo_autenticidade = models.CharField(max_length=200,null=True, blank=True)
+    data_cancelamento = models.DateField(null=True, blank=True)
+    data_emissao = models.DateField(null=True, blank=True)
+    data_recibo = models.DateField(null=True, blank=True)
+    doc_tomador = models.CharField(max_length=200,null=True, blank=True)
+    endereco_prestacao_servico = models.CharField(max_length=500,null=True, blank=True)
+    link_nfe = models.URLField(null=True, blank=True)
+    motivo_cancelamento = models.CharField(max_length=500,null=True, blank=True)
+    nome_tomador = models.CharField(max_length=200,null=True, blank=True)
+    nosso_numero = models.CharField(max_length=200,null=True, blank=True)
+    numero = models.IntegerField(null=True, blank=True)
+    numero_recibo = models.IntegerField(null=True, blank=True)
+    substituicao_tributaria = models.BooleanField(null=True, blank=True)
+    valor = models.FloatField(null=True, blank=True)
+    valor_iss = models.FloatField(null=True, blank=True)
+    valor_nfe = models.FloatField(null=True, blank=True)
