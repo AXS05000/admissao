@@ -1,11 +1,13 @@
 from django.urls import path
 
 from . import views
-from .views import GerarcsvTemplateView, GestaoListView, NotaFiscalCreateView
+from .views import (GerarcsvTemplateView, GestaoListView, NotaFiscalCreateView,
+                    Notas_FiscaisView)
 
 urlpatterns = [
     path('notafiscal/', NotaFiscalCreateView.as_view(), name='notafiscal'),
     path('gestao/', GestaoListView.as_view(), name='gestao'),
+    path('notasfiscais/', Notas_FiscaisView.as_view(), name='notasficais'),
     path('qtddecargos/', views.qtddecargos, name='qtddecargos'),
     path('notafiscal2/', views.notafiscal2, name='notafiscal2'),
     path('notafiscal3/', views.notafiscal3, name='notafiscal3'),

@@ -21,6 +21,53 @@ from .utils import import_basecnpj_from_excel, update_basecnpj_from_excel
 
 
 
+class Notas_FiscaisView(ListView):
+    model = NotaFiscal2
+    template_name = 'notas_fiscais_consulta.html'
+    paginate_by = 10
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        page_obj = context['page_obj']
+
+        # Obtém o número da página atual
+        current_page = page_obj.number
+
+        # Se há mais de 5 páginas
+        if page_obj.paginator.num_pages > 5:
+            if current_page - 2 < 1:
+                start_page = 1
+                end_page = 5
+            elif current_page + 2 > page_obj.paginator.num_pages:
+                start_page = page_obj.paginator.num_pages - 4
+                end_page = page_obj.paginator.num_pages
+            else:
+                start_page = current_page - 2
+                end_page = current_page + 2
+        else:
+            start_page = 1
+            end_page = page_obj.paginator.num_pages
+
+        context['page_range'] = range(start_page, end_page + 1)
+
+        return context
+
+
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            try:
+                date_query = datetime.strptime(query, '%d/%m/%Y').date()  # Ajustando o formato aqui
+                return NotaFiscal2.objects.filter(Q(data_emissao=date_query)).order_by('-numero')
+            except ValueError:  # Captura a exceção se a data for inválida
+                # Aqui você pode lidar com a situação onde a data é inválida, por exemplo, verificando se 'q' corresponde a uma unidade ou nome de cliente
+                notas_by_cnpj = NotaFiscal2.objects.filter(doc_tomador__icontains=query).order_by('-numero')
+                notas_by_nome_cliente = NotaFiscal2.objects.filter(nome_tomador__icontains=query).order_by('-numero')
+                return (notas_by_cnpj | notas_by_nome_cliente)  # Retorna a união dos dois conjuntos de notas
+        return NotaFiscal2.objects.all().order_by('-numero')
+    
+
 
 def consultar_api():
     # Criando o objeto cliente SOAP
