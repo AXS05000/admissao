@@ -1,6 +1,6 @@
 import csv
 import re
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from decimal import Decimal
 
 from django.contrib import messages
@@ -16,6 +16,138 @@ from zeep import Client
 from .forms import BaseCNPJModelForm, NotasModelForm
 from .models import BaseCNPJ, NotaFiscal2, Notas
 from .utils import import_basecnpj_from_excel, update_basecnpj_from_excel
+
+#########################################################################################
+
+
+
+
+
+def preenche_zeros(string, total_chars):
+    return str(string).zfill(total_chars)
+
+def preenche_espacos(string, total_chars):
+    return str(string).ljust(total_chars)
+
+def format_date(date):
+    return date.strftime("%d%m%Y")
+
+def add_days(date, days):
+    return format_date(date + timedelta(days=days))
+
+
+
+
+
+
+
+def generate_txt(request):
+    selected_notas = request.POST.getlist('notas')
+    if selected_notas:
+        notas = NotaFiscal2.objects.filter(id__in=selected_notas)
+    else:
+        notas = NotaFiscal2.objects.all()
+
+    response = HttpResponse(content_type='text/plain')
+    response['Content-Disposition'] = 'attachment; filename="notas.txt"'
+    
+    current_datetime = timezone.now()
+    file_date = format_date(current_datetime)
+    file_hour = current_datetime.strftime("%H%M%S")
+    
+    # Inicializando lote_seq fora do loop
+    lote_seq = 1
+    
+    # Header
+    header = f'24600000         218504752000155CC019070022370680000CC019070022370680000GOIASBUSINESSCONSULTESERVLTDA BCO ABC BRASIL                          1{file_date}{file_hour}{preenche_zeros(lote_seq, 6)}04001600                                                                     \n'
+    response.write(header)
+    
+    # Second line
+    second_line = f'24600011R01  030 2018504752000155CC019070022370680000CC019070022370680000GOIASBUSINESSCONSULTESERVLTDA                                                                                 00{preenche_zeros(lote_seq, 6)}{file_date}000000                                   \n'
+    response.write(second_line)
+
+    total_lines = 2
+    total_notas = 0
+    total_value = 0
+
+    for nota in notas:
+        total_notas += 1
+        total_value += nota.valor
+        
+        # Atualizando lote_seq para cada nota
+        lote_seq = preenche_zeros(total_notas, 6)
+        
+        # Nota lines
+        line_seq = preenche_zeros(total_notas, 5)
+        nota_num = preenche_espacos(nota.numero, 15)
+        date_90_days = add_days(current_datetime, 90)
+        nota_val = preenche_zeros(int(nota.valor*100), 15)
+        nota_date = format_date(nota.data_emissao)
+        
+        nota_line1 = f'24600013{line_seq}P 01CC0190700223706800005000001000000000000011211{nota_num}{date_90_days}{nota_val}00000902N{nota_date}300000000000000000000000000000000000000000000000000000000000000000000000000000                         30020000900000000000\n'
+        response.write(nota_line1)
+
+        # Atualizando line_seq para a segunda linha
+        total_notas += 1
+        line_seq = preenche_zeros(total_notas, 5)
+        
+        nota_line2 = f'24600013{line_seq}Q 012003502099000118CHUBBSEGUROSBRASILSA                    Avenida OLIVEIRA PAIVA 2800             Pinheiros      05402920SaoPaulo       SP0000000000000000                                        000                            \n'
+        response.write(nota_line2)
+
+        total_lines += 2
+
+    # Trailler
+    total_value_str = preenche_zeros(int(total_value*100), 17)
+    total_lines_str = preenche_zeros(total_lines, 6)
+    total_lines_str2 = preenche_zeros(int(total_lines-2), 6)
+    total_notas_str = preenche_zeros(int((total_lines-2)/2), 6)
+
+
+    trailler1 = f'24600015         {total_lines_str}00000000000000000000000{total_notas_str}{total_value_str}0000000000000000000000000000000000000000000000                                                                                                                             \n'
+    response.write(trailler1) 
+
+    trailler2 = f'24699999         000001{total_lines_str2}                                                                                                                                                                                                                   \n'
+    response.write(trailler2) 
+
+
+    return response
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #########################################################################################
 

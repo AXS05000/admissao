@@ -22,6 +22,7 @@ urlpatterns = [
     path('atualizar-cnpj/', views.update_basecnpj, name='atualizar_cnpj'),
     path('importar-cnpj/', views.import_basecnpj, name='importar_basecnpj'),
     path('generate-csv/', views.generate_csv, name='generate-csv'),
+    path('generate-txt/', views.generate_txt, name='generate-txt'),
     path('gerar-csv/', GerarcsvTemplateView.as_view(), name='gerar-csv'),
     path('generate-csv-for-nota/<int:pk>', views.generate_csv_for_nota, name='generate_csv_for_nota'),
     path('buscar-notas/', views.buscar_notas, name='buscar_notas'),  
