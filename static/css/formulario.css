@@ -133,6 +133,12 @@
   cursor: pointer;
 }
 
+.meu-botao {
+  margin-right: 10px; /* Isso adiciona uma margem à direita de cada botão. */
+  min-width: 250px; /* Isso define uma largura mínima para os botões. */
+}
+
+
 .login-button a:hover {
   background-color: rgb(255, 158, 47);
 }

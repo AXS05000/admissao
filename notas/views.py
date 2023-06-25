@@ -20,7 +20,169 @@ from .utils import import_basecnpj_from_excel, update_basecnpj_from_excel
 #########################################################################################
 
 
+# BUSCA E GERAÇÃO DO TXT
+class Notas_FiscaisView(ListView):
+    model = NotaFiscal2
+    template_name = 'notas/notas_portal.html'
+    paginate_by = 10
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['q'] = self.request.GET.get('q', '')
+        context['order_by'] = self.request.GET.get('order_by', '-numero')
+        page_obj = context['page_obj']
+
+        # Obtém o número da página atual
+        current_page = page_obj.number
+
+        # Se há mais de 5 páginas
+        if page_obj.paginator.num_pages > 5:
+            if current_page - 2 < 1:
+                start_page = 1
+                end_page = 5
+            elif current_page + 2 > page_obj.paginator.num_pages:
+                start_page = page_obj.paginator.num_pages - 4
+                end_page = page_obj.paginator.num_pages
+            else:
+                start_page = current_page - 2
+                end_page = current_page + 2
+        else:
+            start_page = 1
+            end_page = page_obj.paginator.num_pages
+
+        context['page_range'] = range(start_page, end_page + 1)
+
+        return context
+
+
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        order_by = self.request.GET.get('order_by', '-numero')
+        if query:
+            try:
+                date_query = datetime.strptime(query, '%d/%m/%Y').date()  
+                return NotaFiscal2.objects.filter(Q(data_emissao=date_query)).order_by(order_by)
+            except ValueError:
+                notas_by_cnpj = NotaFiscal2.objects.filter(doc_tomador__icontains=query).order_by(order_by)
+                notas_by_nome_cliente = NotaFiscal2.objects.filter(nome_tomador__icontains=query).order_by(order_by)
+                return (notas_by_cnpj | notas_by_nome_cliente)
+        return NotaFiscal2.objects.all().order_by(order_by)
+
+
+class GerarcsvTemplateView(ListView):
+    model = Notas
+    template_name = 'notas/notas_do_sistema.html'
+    paginate_by = 10
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['q'] = self.request.GET.get('q', '')
+        context['order_by'] = self.request.GET.get('order_by', '-data_de_criacao')
+        page_obj = context['page_obj']
+
+        # Obtém o número da página atual
+        current_page = page_obj.number
+
+        # Se há mais de 5 páginas
+        if page_obj.paginator.num_pages > 5:
+            if current_page - 2 < 1:
+                start_page = 1
+                end_page = 5
+            elif current_page + 2 > page_obj.paginator.num_pages:
+                start_page = page_obj.paginator.num_pages - 4
+                end_page = page_obj.paginator.num_pages
+            else:
+                start_page = current_page - 2
+                end_page = current_page + 2
+        else:
+            start_page = 1
+            end_page = page_obj.paginator.num_pages
+
+        context['page_range'] = range(start_page, end_page + 1)
+
+        return context
+
+
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        order_by = self.request.GET.get('order_by', '-data_de_criacao')
+        if query:
+            try:
+                date_query = datetime.strptime(query, '%d/%m/%Y').date()  # Ajustando o formato aqui
+                return Notas.objects.filter(Q(data_de_criacao=date_query)).order_by(order_by)
+            except ValueError:  # Captura a exceção se a data for inválida
+                # Aqui você pode lidar com a situação onde a data é inválida, por exemplo, verificando se 'q' corresponde a uma unidade ou nome de cliente
+                notas_by_unidade = Notas.objects.filter(cnpj_da_nota__unidade__icontains=query).order_by(order_by)
+                notas_by_nome_cliente = Notas.objects.filter(cnpj_da_nota__nome_cliente__icontains=query).order_by(order_by)
+                return (notas_by_unidade | notas_by_nome_cliente)  # Retorna a união dos dois conjuntos de notas
+        return Notas.objects.all().order_by(order_by)
+    
+
+
+# PUXAR NOTAS PARA O MODELS.
+def atualizar_notas(request):
+    if request.method == 'POST':
+        response = consultar_api()
+
+        if not response['Erro']:
+            notas_geradas = response['NotasGeradas']['NotaFiscalConsultaDTO']
+            NotaFiscal2.objects.all().delete()  # Remove as notas existentes
+
+            for nota in notas_geradas:
+                NotaFiscal2.objects.create(
+                    aliquota = nota['Aliquota'],
+                    cod_atividade = nota['CodAtividade'].strip(),
+                    cod_obra = nota['CodObra'],
+                    codigo_autenticidade = nota['CodigoAutenticidade'],
+                    data_cancelamento = nota['DataCancelamento'],
+                    data_emissao = nota['DataEmissao'],
+                    data_recibo = nota['DataRecibo'],
+                    doc_tomador = nota['DocTomador'],
+                    endereco_prestacao_servico = nota['EnderecoPrestacaoServico'],
+                    link_nfe = nota['LinkNFE'],
+                    motivo_cancelamento = nota['MotivoCancelamento'],
+                    nome_tomador = nota['NomeTomador'],
+                    nosso_numero = nota['NossoNumero'],
+                    numero = nota['Numero'],
+                    numero_recibo = nota['NumeroRecibo'],
+                    substituicao_tributaria = nota['SubstituicaoTributaria'],
+                    valor = nota['Valor'],
+                    valor_iss = nota['ValorIss'],
+                    valor_nfe = nota['ValorNFE']
+                )
+
+            return render(request, 'update.html', {'notas': NotaFiscal2.objects.all()})
+        else:
+            print(f"Erro: {response['MensagemErro']}")
+
+    return render(request, 'notas/update.html')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+########################################GERAÇÃO DO TXT##############################################
 def preenche_zeros(string, total_chars):
     return str(string).zfill(total_chars)
 
@@ -101,96 +263,7 @@ def generate_txt(request):
     return response
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#########################################################################################
-
-
-
-class Notas_FiscaisView(ListView):
-    model = NotaFiscal2
-    template_name = 'notas_fiscais_consulta.html'
-    paginate_by = 10
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['q'] = self.request.GET.get('q', '')
-        context['order_by'] = self.request.GET.get('order_by', '-numero')
-        page_obj = context['page_obj']
-
-        # Obtém o número da página atual
-        current_page = page_obj.number
-
-        # Se há mais de 5 páginas
-        if page_obj.paginator.num_pages > 5:
-            if current_page - 2 < 1:
-                start_page = 1
-                end_page = 5
-            elif current_page + 2 > page_obj.paginator.num_pages:
-                start_page = page_obj.paginator.num_pages - 4
-                end_page = page_obj.paginator.num_pages
-            else:
-                start_page = current_page - 2
-                end_page = current_page + 2
-        else:
-            start_page = 1
-            end_page = page_obj.paginator.num_pages
-
-        context['page_range'] = range(start_page, end_page + 1)
-
-        return context
-
-
-
-    def get_queryset(self):
-        query = self.request.GET.get('q')
-        order_by = self.request.GET.get('order_by', '-numero')
-        if query:
-            try:
-                date_query = datetime.strptime(query, '%d/%m/%Y').date()  
-                return NotaFiscal2.objects.filter(Q(data_emissao=date_query)).order_by(order_by)
-            except ValueError:
-                notas_by_cnpj = NotaFiscal2.objects.filter(doc_tomador__icontains=query).order_by(order_by)
-                notas_by_nome_cliente = NotaFiscal2.objects.filter(nome_tomador__icontains=query).order_by(order_by)
-                return (notas_by_cnpj | notas_by_nome_cliente)
-        return NotaFiscal2.objects.all().order_by(order_by)
-    
-
-
+#CONSULTA NA API
 def consultar_api():
     # Criando o objeto cliente SOAP
     client = Client('https://nfe.osasco.sp.gov.br/EISSNFEWebServices/NotaFiscalEletronica.svc?wsdl')
@@ -212,73 +285,7 @@ def consultar_api():
     return response
 
 
-
-
-
-
-
-
-
-
-def atualizar_notas(request):
-    if request.method == 'POST':
-        response = consultar_api()
-
-        if not response['Erro']:
-            notas_geradas = response['NotasGeradas']['NotaFiscalConsultaDTO']
-            NotaFiscal2.objects.all().delete()  # Remove as notas existentes
-
-            for nota in notas_geradas:
-                NotaFiscal2.objects.create(
-                    aliquota = nota['Aliquota'],
-                    cod_atividade = nota['CodAtividade'].strip(),
-                    cod_obra = nota['CodObra'],
-                    codigo_autenticidade = nota['CodigoAutenticidade'],
-                    data_cancelamento = nota['DataCancelamento'],
-                    data_emissao = nota['DataEmissao'],
-                    data_recibo = nota['DataRecibo'],
-                    doc_tomador = nota['DocTomador'],
-                    endereco_prestacao_servico = nota['EnderecoPrestacaoServico'],
-                    link_nfe = nota['LinkNFE'],
-                    motivo_cancelamento = nota['MotivoCancelamento'],
-                    nome_tomador = nota['NomeTomador'],
-                    nosso_numero = nota['NossoNumero'],
-                    numero = nota['Numero'],
-                    numero_recibo = nota['NumeroRecibo'],
-                    substituicao_tributaria = nota['SubstituicaoTributaria'],
-                    valor = nota['Valor'],
-                    valor_iss = nota['ValorIss'],
-                    valor_nfe = nota['ValorNFE']
-                )
-
-            return render(request, 'update.html', {'notas': NotaFiscal2.objects.all()})
-        else:
-            print(f"Erro: {response['MensagemErro']}")
-
-    return render(request, 'update.html')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# BUSCAR NOTAS
+# BUSCAR NOTAS (BACKUP)
 def buscar_notas(request):
     wsdl = 'https://nfe.osasco.sp.gov.br/EISSNFEWebServices/NotaFiscalEletronica.svc?wsdl'
     client = Client(wsdl)
@@ -313,103 +320,24 @@ def buscar_notas(request):
         response = client.service.Consultar(request = request_data)
 
 
-    return render(request, 'buscar_notas_portal.html', {'response': response})
+    return render(request, 'notas/buscar_notas_portal.html', {'response': response})
+###################################################################################################################
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#########################################################################################
-
-
-class GestaoListView(ListView):
-    model = Notas
-    template_name = 'gestao.html'
-    paginate_by = 10
-
-    def get(self, request, *args, **kwargs):
-        self.object_list = self.get_queryset()
-        return super().get(request, *args, **kwargs)
-    
-    def get_queryset(self):
-        return super().get_queryset().order_by('data_de_criacao')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        paginator = Paginator(self.object_list, self.paginate_by)
-        page_number = self.request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        context = super().get_context_data(**kwargs)
-        context['page_obj'] = page_obj
-
-        return context
-
-
-
-
-
-
-def notafiscalindividual(request, id):
-    notas = Notas.objects.filter(id=id).order_by('-id')
-    return render(request, 'pages/recipe-view.html', context={
-        'nota_gestao': notas,
-        'pag_de_detalhe': True,
-    })
-
-def cliente(request, cliente_id):
-    notas = Notas.objects.filter(cnpj_da_nota__id=cliente_id).order_by('-id')
-
-    if not notas:
-        return HttpResponse(content='Not found', status=404)
-    return render(request, 'cliente.html', context={
-        'nota_gestao': notas,
-        'title_cliente': f'{notas.first().cnpj_da_nota.nome_cliente} | Ametista'
-    })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+###################################NOTAS VERSÃO ANTIGA######################################################
 
 
 def qtddecargos(request):
     return render(request, 'qtddecargos.html')
 
 
-
-
-
 class NotaFiscalCreateView(CreateView):
     model = Notas
     form_class = NotasModelForm
-    template_name = 'notafiscal.html'
+    template_name = 'notas/notafiscal.html'
     success_url = '/notafiscal/'
 
     def form_valid(self, form):
@@ -631,44 +559,58 @@ def import_basecnpj(request):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ####################################################################################
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###############################################################################
+
+
+#GERAR CSV PARA IMPORTAÇÃO DAS NOTAS
 def generate_csv(request):
     selected_notas = request.POST.getlist('notas')
     if selected_notas:
@@ -983,51 +925,3 @@ def generate_csv_for_nota(request, pk):
         writer.writerow(row)
 
     return response
-
-
-class GerarcsvTemplateView(ListView):
-    model = Notas
-    template_name = 'gerarcsv.html'
-    paginate_by = 10
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        page_obj = context['page_obj']
-
-        # Obtém o número da página atual
-        current_page = page_obj.number
-
-        # Se há mais de 5 páginas
-        if page_obj.paginator.num_pages > 5:
-            if current_page - 2 < 1:
-                start_page = 1
-                end_page = 5
-            elif current_page + 2 > page_obj.paginator.num_pages:
-                start_page = page_obj.paginator.num_pages - 4
-                end_page = page_obj.paginator.num_pages
-            else:
-                start_page = current_page - 2
-                end_page = current_page + 2
-        else:
-            start_page = 1
-            end_page = page_obj.paginator.num_pages
-
-        context['page_range'] = range(start_page, end_page + 1)
-
-        return context
-
-
-
-    def get_queryset(self):
-        query = self.request.GET.get('q')
-        if query:
-            try:
-                date_query = datetime.strptime(query, '%d/%m/%Y').date()  # Ajustando o formato aqui
-                return Notas.objects.filter(Q(data_de_criacao=date_query)).order_by('-data_de_criacao')
-            except ValueError:  # Captura a exceção se a data for inválida
-                # Aqui você pode lidar com a situação onde a data é inválida, por exemplo, verificando se 'q' corresponde a uma unidade ou nome de cliente
-                notas_by_unidade = Notas.objects.filter(cnpj_da_nota__unidade__icontains=query).order_by('-data_de_criacao')
-                notas_by_nome_cliente = Notas.objects.filter(cnpj_da_nota__nome_cliente__icontains=query).order_by('-data_de_criacao')
-                return (notas_by_unidade | notas_by_nome_cliente)  # Retorna a união dos dois conjuntos de notas
-        return Notas.objects.all().order_by('-data_de_criacao')
-    

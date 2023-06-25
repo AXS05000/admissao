@@ -47,19 +47,13 @@
                 <a class="nav-link page-scroll" href="{% url 'index' %}">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link page-scroll" href="#services">Serviços</a>
-              </li>  
-              <li class="nav-item">
                 <a class="nav-link page-scroll" href="#notas">Notas Fiscais</a>
               </li>                            
               <li class="nav-item">
-                <a class="nav-link page-scroll" href="#portfolios">Trabalhos</a>
+                <a class="nav-link page-scroll" href="{% url 'notasficais' %}">Notas Portal</a>
               </li>            
               <li class="nav-item">
-                <a class="nav-link page-scroll" href="#team">Time</a>
-              </li>    
-              <li class="nav-item">
-                <a class="nav-link page-scroll" href="#busca">Candidatos</a>
+                <a class="nav-link page-scroll" href="{% url 'search_collaborator' %}">Candidatos</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link page-scroll" href="{% url 'admissao' %}">Admissão</a>
@@ -140,7 +134,11 @@
                 {% endfor %}
               </table>
               <div class="login-button">
-                <button type="submit" class="btn btn-primary">Gerar CSV para selecionados</button>
+                <button type="submit" class="btn btn-primary meu-botao">Gerar CSV para selecionados</button>
+                <a class="btn btn-primary meu-botao" href="{% url 'notasficais' %}">Emitir Ordem de Serviço</a>
+              </div>
+              <div class="login-button">
+
               </div>
             </form>
 
@@ -155,29 +153,27 @@
                   {% if page_obj.object_list|length > 0 %}
                   {% if page_obj.has_previous %}
                       <li class="page-item">
-                          <a class="page-link" href="?page=1" aria-label="Previous">
+                          <a class="page-link" href="?page=1&q={{ q }}&order_by={{ order_by }}" aria-label="Previous">
                               <span aria-hidden="true"><i class="fa fa-angle-double-left" aria-hidden="true"></i></span>
                           </a>
                       </li>
                   {% endif %}
-                  
                   <!-- Loop para exibir os números das páginas -->
                   {% for i in page_range %}
-                  {% if page_obj.number == i %}
-                      <li class="page-item active">
-                          <a class="page-link active-link" href="#">{{ i }}</a>
-                      </li>
-                  {% else %}
-                      <li class="page-item">
-                          <a class="page-link" href="?page={{ i }}">{{ i }}</a>
-                      </li>
-                  {% endif %}
+                      {% if page_obj.number == i %}
+                          <li class="page-item active">
+                              <a class="page-link active-link" href="#">{{ i }}</a>
+                          </li>
+                      {% else %}
+                          <li class="page-item">
+                              <a class="page-link" href="?page={{ i }}&q={{ q }}&order_by={{ order_by }}">{{ i }}</a>
+                          </li>
+                      {% endif %}
                   {% endfor %}
-                  
                   <!-- Se tem próxima página -->
                   {% if page_obj.has_next %}
                       <li class="page-item">
-                          <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Next">
+                          <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&q={{ q }}&order_by={{ order_by }}" aria-label="Next">
                               <span aria-hidden="true"><i class="fa fa-angle-double-right" aria-hidden="true"></i></span>
                           </a>
                       </li>

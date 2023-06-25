@@ -44,11 +44,13 @@ from .serializers import (BaseSerializer, DepartamentoSerializer,
 
 class CollaboratorSearchView(ListView):
     model = Collaborator
-    template_name = 'search_collaborator.html'
+    template_name = 'admissao/busca_de_candidatos.html'
     paginate_by = 10
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['q'] = self.request.GET.get('q', '')
+        context['order_by'] = self.request.GET.get('order_by', '-id')
         page_obj = context['page_obj']
 
         # Obtém o número da página atual
@@ -77,9 +79,10 @@ class CollaboratorSearchView(ListView):
 
     def get_queryset(self):
         query = self.request.GET.get('q')
+        order_by = self.request.GET.get('order_by', '-id')
         if query:
-            return Collaborator.objects.filter(Q(cpf__icontains=query)).order_by('-id')
-        return Collaborator.objects.all().order_by('-id')
+            return Collaborator.objects.filter(Q(cpf__icontains=query)).order_by(order_by)
+        return Collaborator.objects.all().order_by(order_by)
 
 
 
@@ -90,7 +93,7 @@ class CollaboratorSearchView(ListView):
 
 class CollaboratorUpdateView(UpdateView):
     model = Collaborator
-    template_name = 'formulario_adm_rh.html'
+    template_name = 'admissao/formulario_adm_rh.html'
     fields = '__all__'
     success_url = reverse_lazy('search_collaborator')
 
@@ -99,7 +102,7 @@ class CollaboratorUpdateView(UpdateView):
 
 class CollaboratorDetailView(DetailView):
     model = Collaborator
-    template_name = 'collaborator_detail.html'
+    template_name = 'admissao/collaborator_detail.html'
     
 
 #######################ADMISSÃO COLABORADOR#############################
@@ -107,7 +110,7 @@ class CollaboratorDetailView(DetailView):
 class AdmissaoCreateView(CreateView):
     model = Collaborator
     form_class = Admissao
-    template_name = 'formulario_adm.html'  # substitua com o seu template
+    template_name = 'admissao/formulario_adm.html'  # substitua com o seu template
     success_url = reverse_lazy('admissao')  # substitua com a URL que você quer redirecionar após o sucesso
 
     def form_valid(self, form):
@@ -149,7 +152,7 @@ class AdmissaoCreateView(CreateView):
 class AdmissaoRHCreateView(CreateView):
     model = Collaborator
     form_class = AdmissaoForm
-    template_name = 'formulario_adm_rh.html'
+    template_name = 'admissao/formulario_adm_rh.html'
     success_url = reverse_lazy('admissao_rh')
 
     def form_valid(self, form):
@@ -188,7 +191,7 @@ def upload_template(request):
             return HttpResponseRedirect('/upload_template')  # Redirect to a page showing success.
     else:
         form = UploadFileForm()
-    return render(request, 'upload.html', {'form': form})
+    return render(request, 'admissao/upload.html', {'form': form})
 
 ########################################################################
 
@@ -263,7 +266,7 @@ def select_contract(request):
     collaborators = Collaborator.objects.all()
     templates = ContractTemplate.objects.all()
 
-    return render(request, 'select_contract.html', {'collaborators': collaborators, 'templates': templates})
+    return render(request, 'admissao/select_contract.html', {'collaborators': collaborators, 'templates': templates})
 
 
 def select_contract_id(request, collaborator_id):
@@ -286,7 +289,7 @@ def select_contract_id(request, collaborator_id):
         collaborator = Collaborator.objects.get(id=collaborator_id)
         templates = ContractTemplate.objects.all()
 
-        return render(request, 'select_contract_id.html', {'collaborator': collaborator, 'templates': templates})
+        return render(request, 'admissao/select_contract_id.html', {'collaborator': collaborator, 'templates': templates})
 
 
 

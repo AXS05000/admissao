@@ -29,7 +29,6 @@
     <link rel="icon" type="image/png" href="{% static 'assets/img/go2b-bi.png' %}">
     <link id="pagestyle" href="{% static 'css/busca.css' %}" rel="stylesheet" />
     <link id="pagestyle" href="{% static 'css/paginacao.css' %}" rel="stylesheet" />
-    <link rel="stylesheet" href="{% static 'css/formulario.css' %}">    
   </head>
   
   <body>
@@ -47,19 +46,13 @@
                 <a class="nav-link page-scroll" href="{% url 'index' %}">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link page-scroll" href="#services">Serviços</a>
-              </li>  
-              <li class="nav-item">
                 <a class="nav-link page-scroll" href="{% url 'gerar-csv' %}">Notas Fiscais</a>
               </li>                             
               <li class="nav-item">
-                <a class="nav-link page-scroll" href="#notasportal">Notas Portal</a>
-              </li>            
+                <a class="nav-link page-scroll" href="{% url 'notasficais' %}">Notas Portal</a>
+              </li> 
               <li class="nav-item">
-                <a class="nav-link page-scroll" href="#team">Time</a>
-              </li>    
-              <li class="nav-item">
-                <a class="nav-link page-scroll" href="{% url 'search_collaborator' %}">Candidatos</a>
+                <a class="nav-link page-scroll" href="#busca">Candidatos</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link page-scroll" href="{% url 'admissao' %}">Admissão</a>
@@ -89,19 +82,19 @@
 
       
     <!-- Features Section Start -->
-    <section id="notasportal" class="section">
+    <section id="busca" class="section">
       <div class="container">
         <div class="section-header">          
-          <h2 class="section-title">BUSQUE AS NOTAS:</h2>
-          <span>PORTAL OSASCO</span>
+          <h2 class="section-title">BUSQUE O CANDIDATO:</h2>
+          <span>CANDIDATURAS</span>
         </div>
         <div class="row">
           <div class="row text-center py-2 mt-3">
             <div class="col-4 mx-auto">
                 <div class="input-group input-group-dynamic mb-4" >
                     <span class="input-group-text"><i class="fas fa-search" aria-hidden="true"></i></span>
-                    <form method="GET" action="{% url 'notasficais' %}" class="w-100" >
-                        <input id="search-input" class="form-control custom-input" type="text" name="q" placeholder="Buscar Nota">
+                    <form method="GET" action="{% url 'search_collaborator' %}" class="w-100" >
+                        <input id="search-input" class="form-control custom-input" type="text" name="q" placeholder="Buscar por CPF">
                         <input class="form-control" type="submit" placeholder="Buscar" style="display: none;">
                     </form>
                 </div>
@@ -110,37 +103,52 @@
 
 
 
-          
-          <form method="post" action="{% url 'generate-txt' %}">
-            {% csrf_token %}
-              <table class="table">
-                <thead>
+
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Nome</th>
+                <th scope="col">CPF</th>
+                <th scope="col">Celular</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">Cargo</th>
+                <th scope="col">Cliente</th>
+                <th scope="col">Derpartamento</th>
+                <th scope="col">Turno</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for collaborator in object_list %}
                 <tr>
-                  <th scope="col">Selecionar</th>
-                  <th scope="col">ID da nota</th>
-                  <th scope="col">Data de Emissão</th>
-                  <th scope="col">Valor da Nota</th>
-                  <th scope="col">Nome do cliente</th>
+                  <td>
+                    <a href="{% url 'collaborator_detail' collaborator.id %}">{{ collaborator.name }}</a>
+                  </td>
+                  <td>
+                    <p>{{ collaborator.cpf }}</p>
+                  </td>
+                  <td>
+                    <p>{{ collaborator.celular }}</p>
+                  </td>
+                  <td>
+                    <p>{{ collaborator.email }}</p>
+                  </td>
+                  <td>
+                    <p>{{ collaborator.cargo.cargo }}</p>
+                  </td>
+                  <td>
+                    <p>{{ collaborator.cliente_gi.nome }}</p>
+                  </td>
+                  <td>
+                    <p>{{ collaborator.departamento.nome_departamento }}</p>
+                  </td>
+                  <td>
+                    <p>{{ collaborator.turno.nome }}</p>
+                  </td>
                 </tr>
-                </thead>
-                {% for nota in page_obj %}
-                <tr>
-                  <td><input type="checkbox" name="notas" value="{{ nota.id }}"></td>
-                  <td><p>{{ nota.numero }}</p></td>
-                  <td><p>{{ nota.data_emissao|date:"d/m/Y" }}</p></td>
-                  <td><p>R$ {{ nota.valor|floatformat:2 }}</p></td>
-                  <td><p>{{ nota.nome_tomador }}</p></td>
-                </tr>
-                {% endfor %}
-              </table>
-              <div class="login-button">
-                <button type="submit" class="btn btn-primary">Gerar TXT ABC</button>
-              </div>
-            </form>
-
-            
-
-
+              {% endfor %}
+            </tbody>
+          </table>
+    
         <!-- Início da Paginação -->
         <div class="row text-center py-2">
           <div class="col-4 mx-auto">
@@ -175,7 +183,6 @@
                       </li>
                   {% endif %}
                   {% endif %}
-                  
               </ul>
           </div>
         </div>
