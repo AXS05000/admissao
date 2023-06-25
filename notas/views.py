@@ -14,12 +14,10 @@ from django.views.generic import CreateView, DetailView, ListView
 from zeep import Client
 
 from .forms import BaseCNPJModelForm, NotasModelForm
-from .models import BaseCNPJ, NotaFiscal2, Notas
+from .models import BaseCNPJ, NotaFiscal2, Notas, NumeradorLote
 from .utils import import_basecnpj_from_excel, update_basecnpj_from_excel
 
 #########################################################################################
-
-
 
 
 
@@ -35,12 +33,6 @@ def format_date(date):
 def add_days(date, days):
     return format_date(date + timedelta(days=days))
 
-
-
-
-
-
-
 def generate_txt(request):
     selected_notas = request.POST.getlist('notas')
     if selected_notas:
@@ -54,16 +46,20 @@ def generate_txt(request):
     current_datetime = timezone.now()
     file_date = format_date(current_datetime)
     file_hour = current_datetime.strftime("%H%M%S")
+
+    numerador_lote = NumeradorLote.objects.first()
+    if numerador_lote is None: 
+        numerador_lote = NumeradorLote(valor=1)
+    else:
+        numerador_lote.valor += 1
+    numerador_lote.save()
     
-    # Inicializando lote_seq fora do loop
-    lote_seq = 1
+    lote_seq = preenche_zeros(numerador_lote.valor, 6)
     
-    # Header
-    header = f'24600000         218504752000155CC019070022370680000CC019070022370680000GOIASBUSINESSCONSULTESERVLTDA BCO ABC BRASIL                          1{file_date}{file_hour}{preenche_zeros(lote_seq, 6)}04001600                                                                     \n'
+    header = f'24600000         218504752000155CC019070022370680000CC019070022370680000GOIASBUSINESSCONSULTESERVLTDA BCO ABC BRASIL                          1{file_date}{file_hour}{lote_seq}04001600                                                                     \n'
     response.write(header)
     
-    # Second line
-    second_line = f'24600011R01  030 2018504752000155CC019070022370680000CC019070022370680000GOIASBUSINESSCONSULTESERVLTDA                                                                                 00{preenche_zeros(lote_seq, 6)}{file_date}000000                                   \n'
+    second_line = f'24600011R01  030 2018504752000155CC019070022370680000CC019070022370680000GOIASBUSINESSCONSULTESERVLTDA                                                                                 00{lote_seq}{file_date}000000                                   \n'
     response.write(second_line)
 
     total_lines = 2
@@ -73,21 +69,15 @@ def generate_txt(request):
     for nota in notas:
         total_notas += 1
         total_value += nota.valor
-        
-        # Atualizando lote_seq para cada nota
-        lote_seq = preenche_zeros(total_notas, 6)
-        
-        # Nota lines
         line_seq = preenche_zeros(total_notas, 5)
         nota_num = preenche_espacos(nota.numero, 15)
         date_90_days = add_days(current_datetime, 90)
-        nota_val = preenche_zeros(int(nota.valor*100), 15)
+        nota_val = preenche_zeros(int(round(nota.valor, 2)*100), 15)
         nota_date = format_date(nota.data_emissao)
         
         nota_line1 = f'24600013{line_seq}P 01CC0190700223706800005000001000000000000011211{nota_num}{date_90_days}{nota_val}00000902N{nota_date}300000000000000000000000000000000000000000000000000000000000000000000000000000                         30020000900000000000\n'
         response.write(nota_line1)
 
-        # Atualizando line_seq para a segunda linha
         total_notas += 1
         line_seq = preenche_zeros(total_notas, 5)
         
@@ -96,8 +86,7 @@ def generate_txt(request):
 
         total_lines += 2
 
-    # Trailler
-    total_value_str = preenche_zeros(int(total_value*100), 17)
+    total_value_str = preenche_zeros(int(round(total_value, 2)*100), 17)
     total_lines_str = preenche_zeros(total_lines, 6)
     total_lines_str2 = preenche_zeros(int(total_lines-2), 6)
     total_notas_str = preenche_zeros(int((total_lines-2)/2), 6)
@@ -108,7 +97,6 @@ def generate_txt(request):
 
     trailler2 = f'24699999         000001{total_lines_str2}                                                                                                                                                                                                                   \n'
     response.write(trailler2) 
-
 
     return response
 

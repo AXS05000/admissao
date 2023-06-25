@@ -198,7 +198,8 @@ class Notas(models.Model):
 
 
 
-
+class NumeradorLote(models.Model):
+    valor = models.IntegerField(default=1)
 
 class NotaFiscal2(models.Model):
     aliquota = models.FloatField(null=True, blank=True)
