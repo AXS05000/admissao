@@ -202,8 +202,7 @@ def generate_txt(request):
     else:
         notas = NotaFiscal2.objects.all()
 
-    response = HttpResponse(content_type='text/plain')
-    response['Content-Disposition'] = 'attachment; filename="notas.txt"'
+
     
     current_datetime = timezone.now()
     file_date = format_date(current_datetime)
@@ -217,6 +216,10 @@ def generate_txt(request):
     numerador_lote.save()
     
     lote_seq = preenche_zeros(numerador_lote.valor, 6)
+    lote_seq2 = preenche_zeros(numerador_lote.valor, 2)
+
+    response = HttpResponse(content_type='text/plain')
+    response['Content-Disposition'] = f'attachment; filename="LOTE {lote_seq2}.txt"'
     
     header = f'24600000         218504752000155CC019070022370680000CC019070022370680000GOIASBUSINESSCONSULTESERVLTDA BCO ABC BRASIL                          1{file_date}{file_hour}{lote_seq}04001600                                                                     \n'
     response.write(header)
