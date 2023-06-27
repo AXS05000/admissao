@@ -24,7 +24,7 @@ from .utils import import_basecnpj_from_excel, update_basecnpj_from_excel
 class Notas_FiscaisView(ListView):
     model = NotaFiscal2
     template_name = 'notas/notas_portal.html'
-    paginate_by = 10
+    paginate_by = 20
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -73,7 +73,7 @@ class Notas_FiscaisView(ListView):
 class GerarcsvTemplateView(ListView):
     model = Notas
     template_name = 'notas/notas_do_sistema.html'
-    paginate_by = 10
+    paginate_by = 20
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -153,7 +153,7 @@ def atualizar_notas(request):
                     valor_nfe = nota['ValorNFE']
                 )
 
-            return render(request, 'update.html', {'notas': NotaFiscal2.objects.all()})
+            return render(request, 'notas/update.html', {'notas': NotaFiscal2.objects.all()})
         else:
             print(f"Erro: {response['MensagemErro']}")
 

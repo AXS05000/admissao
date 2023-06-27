@@ -45,7 +45,7 @@ from .serializers import (BaseSerializer, DepartamentoSerializer,
 class CollaboratorSearchView(ListView):
     model = Collaborator
     template_name = 'admissao/busca_de_candidatos.html'
-    paginate_by = 10
+    paginate_by = 20
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
